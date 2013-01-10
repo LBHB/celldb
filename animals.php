@@ -156,8 +156,6 @@ if (-1==$action) {
   }
  }
 
-$specieslist=array("ferret,active","ferret,all","rat,active","rat,all",
-                   "mouse,active","mouse,all","monkey,all","alien,all");
 if (0==$openforedit || ""==$openforedit) {
   // just display, don't edit
   
@@ -165,14 +163,14 @@ if (0==$openforedit || ""==$openforedit) {
   echo("Species: ");
   echo("<select OnChange=\"location.href=this.options[this.selectedIndex].value\">\n");
   echo(" <option  value=\"animals.php?&queryspecies=%\"$sel>all</option>\n");
-  for ($ii=0; $ii<count($specieslist); $ii++) {
-    if ($queryspecies.",".$sactive == $specieslist[$ii]) {
+  for ($ii=0; $ii<count($SpeciesStatusList); $ii++) {
+    if ($queryspecies.",".$sactive == $SpeciesStatusList[$ii]) {
       $sel=" selected";
     } else {
       $sel="";
     }
-    echo(" <option  value=\"animals.php?&queryspecies=" . $specieslist[$ii] .
-         "\"$sel>" . $specieslist[$ii] . "</option>\n");
+    echo(" <option  value=\"animals.php?&queryspecies=" . $SpeciesStatusList[$ii] .
+         "\"$sel>" . $SpeciesStatusList[$ii] . "</option>\n");
   }
   echo("</select>&nbsp;&nbsp;");
   if ("active"==$sactive){
@@ -318,17 +316,16 @@ if (0==$openforedit || ""==$openforedit) {
   echo("</tr>\n");
     
   echo("<tr>\n");
-  $specieslist=array("ferret","rat","mouse","monkey","alien");
   echo("  <td><b>Species:</b></td>\n");
   echo("  <td><select name=\"species\">\n");
-  for ($ii=0; $ii<count($specieslist); $ii++) {
-    if ($species == $specieslist[$ii]) {
+  for ($ii=0; $ii<count($SpeciesList); $ii++) {
+    if ($species == $SpeciesList[$ii]) {
       $sel=" selected";
     } else {
       $sel="";
     }
-    echo(" <option value=\"" . $specieslist[$ii] . "\"$sel>" . 
-         $specieslist[$ii] . "</option>\n");
+    echo(" <option value=\"" . $SpeciesList[$ii] . "\"$sel>" . 
+         $SpeciesList[$ii] . "</option>\n");
   }
   echo("</select></td>\n");
   echo("</tr>\n");

@@ -19,7 +19,6 @@ include_once "./celldb.php";
 
 echo("<BODY bgcolor=\"$userbg\" text=\"$userfg\"" .
      " link=\"$linkfg\" vlink=\"$vlinkfg\" alink=\"$alinkfg\">");
-//echo("$animal : $well : $queryspecies : $recstat<br>"); 
 
 // save latest well query parameters
 if (""!=$userid) {
@@ -135,21 +134,17 @@ if ("all"==$queryspecies2) {
    $queryspecies2="%";
 }
  
-  $specieslist=array("ferret,active","ferret,mine","ferret,all",
-                     "rat,active","rat,mine","rat,all",
-                     "mouse,active","mouse,mine","mouse,all",
-                     "monkey,all","alien,all");
   echo("Species: ");
   echo("<select OnChange=\"location.href=this.options[this.selectedIndex].value
 \">\n");
   echo(" <option value=\"celllist.php?animal=$animal&recstat=$recstat&well=$well&showdata=$showdata&queryspecies=%\"$sel>all</option>\n");
-  for ($ii=0; $ii<count($specieslist); $ii++) {
-    if ($queryspecies == $specieslist[$ii]) {
+  for ($ii=0; $ii<count($SpeciesStatusList); $ii++) {
+    if ($queryspecies == $SpeciesStatusList[$ii]) {
       $sel=" selected";
     } else {
       $sel="";
     }
-    echo(" <option value=\"celllist.php?animal=$animal&recstat=$recstat&well=$well&showdata=$showdata&queryspecies=" . $specieslist[$ii] . "\"$sel>" . $specieslist[$ii] . "</option>\n");
+    echo(" <option value=\"celllist.php?animal=$animal&recstat=$recstat&well=$well&showdata=$showdata&queryspecies=" . $SpeciesStatusList[$ii] . "\"$sel>" . $SpeciesStatusList[$ii] . "</option>\n");
   }
   echo("</select>&nbsp;\n");
  

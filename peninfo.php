@@ -167,7 +167,7 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
      
      echo("<td>" . $row["cellid"] . "\n");
      echo("&nbsp;&nbsp;Area: ". $row["area"] . "\n");
-     echo("&nbsp;&nbsp;CF: ". $row["cf"]);
+     echo("&nbsp;&nbsp;BF: ". $row["bf"]);
      echo("&nbsp;&nbsp;BW: ". $row["bw"] . "\n");
      if ($row["crap"]>0) {
        echo("<b> *** CRAP ***</b>");

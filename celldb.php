@@ -78,8 +78,6 @@ function dblog($s,$userid) {
 
 function checkpwd($userid,$passwd) {
   
-  global $celldb_path;
-  
   $errormsg="ERROR: Account $userid does not exist or incorrect password.";
   
   $sql="SELECT * FROM gUserPrefs WHERE userid=\"$userid\"";
@@ -100,6 +98,7 @@ function checkpwd($userid,$passwd) {
       $_SESSION["sesssessionid"]=md5($passwd);
       
       header("Location: $refpage?reqfmt=1");
+      //echo("Location: $refpage?reqfmt=1");
       exit;
     } elseif (crypt($passwd,'my secret')==$realpw) {
      // newly entered password checks out
@@ -112,9 +111,9 @@ function checkpwd($userid,$passwd) {
       
       header("Location: $refpage?reqfmt=1");
       exit;
-        } else {
-      header("Location: ".$celldb_path."/index.php?errormsg=".
-             rawurlencode($errormsg));
+    } else {
+      echo("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
+      //header("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
       //$_SESSION["sessuserid"]="guest";
       //$_SESSION["sesssessionid"]="";
       //return 0;
@@ -122,8 +121,7 @@ function checkpwd($userid,$passwd) {
     }
     
   } else {
-    header("Location: ".$celldb_path."/index.php?errormsg=".
-           rawurlencode($errormsg));
+    header("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
     //$_SESSION["sessuserid"]="guest";
     //$_SESSION["sesssessionid"]="";
     //return 0;
@@ -314,6 +312,11 @@ function cellheader($rpath="") {
   } else {
     echo("&nbsp;<a href=\"".$rpath."weights.php\">Weights</a>\n");
   }
+  if ("tools"==$ss) {
+    echo("&nbsp;<b>Tools</b>\n");
+  } else {
+    echo("&nbsp;<a href=\"".$rpath."tools.php\">Tools</a>\n");
+  }
   if ("editrunclass"==$ss) {
     echo("&nbsp;<b>Run classes</b>\n");
   } else {
@@ -386,11 +389,25 @@ if (!isset($dbserver)) {
   fatal_error("Database server not specified. <tt>config.php</tt> missing?");
 }
 
+//version 0.3: added multi-unit per recording site support!
+// version 0.4, moved over to NSL, own user management system
+//              what to do about different types of physiology data?
+// version 0.5  added alternate views
+$siteinfo="CELLDB v0.5";
+
 // don't log warnings because SVD is too lazy to pre-declare all variables
 //error_reporting(E_ALL & ~E_NOTICE);
 
+// automatically parse html posted variables (i think?)
+import_request_variables("GP", "");
+
 // initial db connection needed basically for anything
-if (!$dbcnx=@mysql_connect($dbserver.":3306",$dbuser,$dbpassword)) {
+//$dbcnx=mysql_connect($dbserver.":3306",$dbuser,$dbpassword);
+
+// initial db connection needed basically for anything
+$dbcnx=@mysql_connect($dbserver.":3306",$dbuser,$dbpassword);
+
+if (!$dbcnx) {
   fatal_error("Could not connect to database server $dbserver (uid=$dbuser, pw=$dbpassword). Make sure settings in <tt>config.php</tt> are valid.");
  }
 
@@ -398,13 +415,6 @@ if (!$dbcnx=@mysql_connect($dbserver.":3306",$dbuser,$dbpassword)) {
 if (!mysql_select_db($dbname, $dbcnx)) {
   fatal_error("Could connect to db server but could not open database $dbname. Make dbname specification is correct in <tt>config.php</tt>.");
  }
-
-// automatically parse html posted variables (i think?)
-import_request_variables("GP", "");
-
-// figure out root URI of celldb 
-$path_parts = pathinfo($_SERVER['SCRIPT_NAME']);
-$celldb_path=$path_parts['dirname'];
 
 // start session if it's not started
 $tid=session_id();
@@ -513,6 +523,12 @@ $_SESSION["sessuserid"]=$userid;
 $_SESSION["sessuidnum"]=$uidnum;
 $_SESSION["sesssessionid"]=$sessionid;
 
+
+// SET SOME GLOBALS
+$SpeciesList=array("ferret","rat","mouse","monkey","human");
+$SpeciesStatusList=array("ferret,active","ferret,all","rat,active","rat,all",
+                         "mouse,active","mouse,all","monkey,all","human,all");
+
 if (""==$userbg) {
   $userbg="#FFFFFF";
 }
@@ -520,13 +536,13 @@ if (""==$userfg) {
   $userfg="#000000";
 }
 if (""==$linkfg) {
-  $linkfg="#4444DD";
+  $linkfg="#6666FF";
 }
 if (""==$vlinkfg) {
-  $vlinkfg="#2222DD";
+  $vlinkfg="#3333FF";
 }
 if (""==$alinkfg) {
-  $alinkfg="#00DD00";
+  $alinkfg="#FFFF00";
 }
 
 // set up link names for alternative views:
