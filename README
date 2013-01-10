@@ -1,0 +1,49 @@
+INSTRUCTIONS FOR SETTING UP CELLDB 
+STEPHEN DAVID
+svd@umd.edu
+2005-10-10
+
+-----------------------------------------------
+Please use svn to manage your celldb changes!!
+-----------------------------------------------
+
+Quick & dirty instructions for getting celldb up and running on a
+linux server.  This also installs the infrastructure for the queue,
+although a few extra steps are required to actually get the queue
+running.
+
+1. make sure you have a web server with php extensions installed
+
+2. make sure mysqld is installed.
+
+3. copy the contents of this directory somewhere that it can be sent 
+   out on the web. eg, /var/www/html/celldb/
+
+4. make sure that the http server knows to pipe *.php files through 
+   the PHP intepreter. this may already be configured in your server.
+   if not, I think this can be done by adding these two lines to
+   /etc/httpd/conf/httpd.conf:
+       AddType application/x-httpd-php php
+       DirectoryIndex index.php index.html index.html.var
+
+5. in mysql, create a database called "cell". also create a user with 
+   full privileges for cell: id="celldb_user" pw="celldb_123" (these 
+   are hard coded in config.php... so you can change them if you want).
+
+6. from the install directory, run mysql, then enter these commands:
+        mysql> use cell;
+        mysql> source make_celldb.sql
+
+7. copy config.php.default to config.php and edit it to reflect the
+   connection settings for your mysql database.
+
+8. that should be it.  browse to "http://localhost/celldb/index.php"
+   and try to log in.
+
+   by default celldb manages its own accounts and will let anyone create
+   a new account ($ypaccounts=0 in config.php).
+   optionally ($ypaccounts=1), celldb can check passwords by running:
+        "ypmatch <user> <passwd>" 
+   through a shell command.
+   
+
