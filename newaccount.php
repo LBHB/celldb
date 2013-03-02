@@ -67,7 +67,7 @@ if (2==$action) {
   if (mysql_num_rows($userdata)>0) {
     $sql="UPDATE gUserPrefs" .
       " SET password=\"$sessionid\",".
-      " seclevel=2,".
+      " seclevel=6,".
       " email=\"" . tidystr($email) . "\",".
       " realname=\"$realname\", ".
       " lab=\"$LAB\"".
@@ -79,7 +79,7 @@ if (2==$action) {
     $sql="INSERT INTO gUserPrefs" .
       " (userid,password,seclevel,email,realname,lab)".
       " VALUES (\"" . tidystr($userid) . "\",\"" . 
-      "$sessionid\",2,\"" . tidystr($email) . "\",\"$realname\",".
+      "$sessionid\",6,\"" . tidystr($email) . "\",\"$realname\",".
       "\"$LAB\")";
     $result=mysql_query($sql);
     $uid=mysql_insert_id();
