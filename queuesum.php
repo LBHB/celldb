@@ -1,6 +1,6 @@
 <?php
 
-echo("<HR ALIGN=CENTER SIZE=1 WIDTH=100% NOSHADE>\n");
+//echo("<HR ALIGN=CENTER SIZE=1 WIDTH=100% NOSHADE>\n");
 
 // summary stats
 

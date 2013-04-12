@@ -286,6 +286,7 @@ function queuefooter() {
 function cellheader($rpath="") {
   
   global $siteinfo;
+  global $userid;
   
   $ss=explode(".",getenv("SCRIPT_NAME"));
   $ss=explode("/",$ss[0]);
@@ -334,6 +335,11 @@ function cellheader($rpath="") {
   }
   echo("&nbsp;<a href=\"".$rpath."queuemonitor.php?complete=-1\">Jobs</a>\n");
   echo("&nbsp;<a href=\"".$rpath."order_history.php\">Orders</a>\n" );
+  if ("celldbusers"==$ss) {
+    echo("&nbsp;<b>Settings</b>\n");
+  } else {
+    echo("&nbsp;<a href=\"".$rpath."celldbusers.php?activeusers=1&edituserid=$userid\">Settings</a>\n");
+  }
   echo("&nbsp;<a href=\"".$rpath."index.php?logout=1\">Logout</a>\n" );
   echo("</p>\n");
   echo("<HR ALIGN=CENTER SIZE=1 WIDTH=100% NOSHADE>\n");

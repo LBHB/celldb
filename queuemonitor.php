@@ -41,6 +41,10 @@ if (0!=$action && $target>0) {
       //echo("Removing queue id $target<br>");
       $sql="DELETE FROM tQueue WHERE id=$target";
       $compdata=mysql_query($sql);
+    } elseif (-2==$action && ($seclevel>=5 || $row["user"]==$userid)) {
+      //echo("Removing queue id $target<br>");
+      $sql="UPDATE tQueue SET killnow=1 WHERE id=$target";
+      $compdata=mysql_query($sql);
     } elseif (1==$action) {
       //echo("Reseting queue id $target<br>");
       $sql="UPDATE tQueue SET complete=0 WHERE id=$target";
@@ -71,10 +75,11 @@ echo("<meta http-equiv=\"Refresh\" content=\"60; URL=$redirurl\">");
 
 <?php
 
-echo( "<b>Queue status</b>\n" );
-echo(" (<a href=\"queue/queuemasterlog.txt\">today's log</a>");
-echo(" <a href=\"queue/queuemasterlog.txt.1\">yesterday's log</a>");
-echo(" <a href=\"queuehelp.php\">help</a>)<br>");
+//echo( "<b>Queue status</b>\n" );
+//echo(" (<a href=\"queue/queuemasterlog.txt\">today's log</a>");
+//echo(" <a href=\"queue/queuemasterlog.txt.1\">yesterday's log</a>");
+//echo(" <a href=\"queuehelp.php\">help</a>)<br>");
+cellheader();
 
 // summary stats
 include "./queuesum.php";
@@ -240,6 +245,8 @@ while ( $row = mysql_fetch_array($queuedata) ) {
     echo($sorturl . $orderby . "&action=1&target=" . $row["id"] . "\">RESET</a>&nbsp;</td>");
   } elseif (0==$row["complete"] && ($seclevel>=5 || ($row["user"]==$userid && $seclevel>0))) {
     echo("   <td>&nbsp;" . $sorturl . $orderby . "&action=-1&target=" . $row["id"] . "\">DELETE</a>&nbsp;</td>");
+  } elseif (-1==$row["complete"] && ($seclevel>=5 || ($row["user"]==$userid && $seclevel>0))) {
+    echo("   <td>&nbsp;" . $sorturl . $orderby . "&action=-2&target=" . $row["id"] . "\">KILL</a>&nbsp;</td>");
   } else {
     echo("   <td></td>\n");
   }

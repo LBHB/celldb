@@ -1,3 +1,8 @@
+-- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (i686)
+--
+-- Host: localhost    Database: cell
+-- ------------------------------------------------------
+-- Server version	5.5.29-0ubuntu0.12.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -9,6 +14,39 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `NarfResults`
+--
+
+DROP TABLE IF EXISTS `NarfResults`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `NarfResults` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cellid` varchar(255) DEFAULT NULL,
+  `batch` int(11) DEFAULT NULL,
+  `modelname` text,
+  `r_test` double DEFAULT NULL,
+  `r_fit` double DEFAULT NULL,
+  `score` double DEFAULT NULL,
+  `sparsity` double DEFAULT NULL,
+  `modelpath` text,
+  `modelfile` text,
+  `figurefile` text,
+  `githash` varchar(255) DEFAULT NULL,
+  `lastmod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `modelnameidx` (`modelname`(200)),
+  KEY `batchidx` (`batch`),
+  KEY `cellididx` (`cellid`)
+) ENGINE=InnoDB AUTO_INCREMENT=34980 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gAccess`
+--
+
 DROP TABLE IF EXISTS `gAccess`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -26,8 +64,13 @@ CREATE TABLE `gAccess` (
   `password` varchar(255) DEFAULT NULL,
   `granted_beebop` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1551 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gAnimal`
+--
+
 DROP TABLE IF EXISTS `gAnimal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -57,8 +100,13 @@ CREATE TABLE `gAnimal` (
   `lab` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `speciesidx` (`species`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=277 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gCalendar`
+--
+
 DROP TABLE IF EXISTS `gCalendar`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -74,8 +122,13 @@ CREATE TABLE `gCalendar` (
   `emailed` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `calidx` (`calname`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=377 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gCellMaster`
+--
+
 DROP TABLE IF EXISTS `gCellMaster`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -114,8 +167,13 @@ CREATE TABLE `gCellMaster` (
   PRIMARY KEY (`id`),
   KEY `cellididx` (`cellid`),
   KEY `penidx` (`penid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=34129 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gData`
+--
+
 DROP TABLE IF EXISTS `gData`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -137,8 +195,13 @@ CREATE TABLE `gData` (
   KEY `nameidx` (`name`),
   KEY `masteridx` (`masterid`),
   KEY `rawidx` (`rawid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=4254862 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gDataRaw`
+--
+
 DROP TABLE IF EXISTS `gDataRaw`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -190,8 +253,13 @@ CREATE TABLE `gDataRaw` (
   KEY `runclassididx` (`runclassid`,`stimspeedid`),
   KEY `behavioridx` (`behavior`,`task`),
   KEY `stimclassididx` (`stimclass`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=95915 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gHealth`
+--
+
 DROP TABLE IF EXISTS `gHealth`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -214,8 +282,13 @@ CREATE TABLE `gHealth` (
   KEY `animalidx` (`animal_id`),
   KEY `dateidx` (`date`),
   KEY `animalidx2` (`animal`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=87789 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gPenetration`
+--
+
 DROP TABLE IF EXISTS `gPenetration`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -255,9 +328,15 @@ CREATE TABLE `gPenetration` (
   `wellfirstspike` int(11) DEFAULT NULL,
   `wellposition` text,
   `firstdepth` text,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  KEY `useridx` (`addedby`)
+) ENGINE=MyISAM AUTO_INCREMENT=38280 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gRunClass`
+--
+
 DROP TABLE IF EXISTS `gRunClass`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -272,8 +351,13 @@ CREATE TABLE `gRunClass` (
   `task` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `nameidx` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=106 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gSingleCell`
+--
+
 DROP TABLE IF EXISTS `gSingleCell`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -306,8 +390,13 @@ CREATE TABLE `gSingleCell` (
   PRIMARY KEY (`id`),
   KEY `cellididx` (`cellid`),
   KEY `masteridx` (`masterid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=43375 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gSingleRaw`
+--
+
 DROP TABLE IF EXISTS `gSingleRaw`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -330,8 +419,13 @@ CREATE TABLE `gSingleRaw` (
   KEY `singleidx` (`singleid`),
   KEY `cellididx` (`cellid`),
   KEY `masteridx` (`masterid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=153952 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gUserPrefs`
+--
+
 DROP TABLE IF EXISTS `gUserPrefs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -379,8 +473,13 @@ CREATE TABLE `gUserPrefs` (
   PRIMARY KEY (`id`),
   KEY `useridx` (`userid`),
   KEY `labidx` (`lab`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=216 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `oCompany`
+--
+
 DROP TABLE IF EXISTS `oCompany`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -403,8 +502,13 @@ CREATE TABLE `oCompany` (
   `addedby` varchar(255) DEFAULT NULL,
   `bad` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=185 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `oItem`
+--
+
 DROP TABLE IF EXISTS `oItem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -419,8 +523,13 @@ CREATE TABLE `oItem` (
   `addedby` varchar(255) DEFAULT NULL,
   `bad` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=807 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `oOrder`
+--
+
 DROP TABLE IF EXISTS `oOrder`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -435,8 +544,13 @@ CREATE TABLE `oOrder` (
   `addedby` varchar(255) DEFAULT NULL,
   `bad` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=835 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `oOrderItem`
+--
+
 DROP TABLE IF EXISTS `oOrderItem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -452,8 +566,13 @@ CREATE TABLE `oOrderItem` (
   `bad` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `orderidx` (`orderid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1202 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pages`
+--
+
 DROP TABLE IF EXISTS `pages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -463,6 +582,11 @@ CREATE TABLE `pages` (
   PRIMARY KEY (`title`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sBatch`
+--
+
 DROP TABLE IF EXISTS `sBatch`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -508,8 +632,13 @@ CREATE TABLE `sBatch` (
   `parmstring` text,
   `matcmd` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=243 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sCellFile`
+--
+
 DROP TABLE IF EXISTS `sCellFile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -555,8 +684,13 @@ CREATE TABLE `sCellFile` (
   KEY `rawididx` (`rawid`),
   KEY `celldataididx` (`celldataid`),
   KEY `cellididx` (`cellid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=71206 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sResults`
+--
+
 DROP TABLE IF EXISTS `sResults`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -569,8 +703,13 @@ CREATE TABLE `sResults` (
   PRIMARY KEY (`id`),
   KEY `runidx` (`runid`),
   KEY `batchidx` (`batch`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=354580 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sRunData`
+--
+
 DROP TABLE IF EXISTS `sRunData`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -591,8 +730,13 @@ CREATE TABLE `sRunData` (
   `singleid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `celldataididx` (`celldataid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=56776 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tBatch`
+--
+
 DROP TABLE IF EXISTS `tBatch`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -601,8 +745,13 @@ CREATE TABLE `tBatch` (
   `name` varchar(20) DEFAULT NULL,
   `details` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tCell`
+--
+
 DROP TABLE IF EXISTS `tCell`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -615,8 +764,13 @@ CREATE TABLE `tCell` (
   `yoffset` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `cellididx` (`cellid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=136 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tCellData`
+--
+
 DROP TABLE IF EXISTS `tCellData`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -629,8 +783,13 @@ CREATE TABLE `tCellData` (
   `masterid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cellididx` (`cellid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=371 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tCellFile`
+--
+
 DROP TABLE IF EXISTS `tCellFile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -672,8 +831,13 @@ CREATE TABLE `tCellFile` (
   KEY `masterididx` (`masterid`),
   KEY `cellididx` (`cellid`),
   KEY `rawididx` (`rawid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1634 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tComputer`
+--
+
 DROP TABLE IF EXISTS `tComputer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -705,8 +869,13 @@ CREATE TABLE `tComputer` (
   `nocheck` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `nameidx` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tEvent`
+--
+
 DROP TABLE IF EXISTS `tEvent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -722,8 +891,13 @@ CREATE TABLE `tEvent` (
   PRIMARY KEY (`id`),
   KEY `codeidx` (`code`),
   KEY `queueidx` (`queueid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1450502 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tGlobal`
+--
+
 DROP TABLE IF EXISTS `tGlobal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -739,8 +913,13 @@ CREATE TABLE `tGlobal` (
   `info` varchar(255) DEFAULT NULL,
   `lastmod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tGlobalData`
+--
+
 DROP TABLE IF EXISTS `tGlobalData`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -751,6 +930,11 @@ CREATE TABLE `tGlobalData` (
   `daemonhost` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tGrData`
+--
+
 DROP TABLE IF EXISTS `tGrData`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -772,8 +956,13 @@ CREATE TABLE `tGrData` (
   `stimreps` int(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `cellididx` (`cellid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tQueue`
+--
+
 DROP TABLE IF EXISTS `tQueue`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -796,11 +985,16 @@ CREATE TABLE `tQueue` (
   `allowqueuemaster` int(11) DEFAULT '0',
   `computerid` int(11) DEFAULT NULL,
   `priority` int(11) DEFAULT '0',
-  `note` varchar(50) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
   `waitid` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=15915 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tRunData`
+--
+
 DROP TABLE IF EXISTS `tRunData`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -850,8 +1044,13 @@ CREATE TABLE `tRunData` (
   `cellid` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `celldataididx` (`celldataid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2326 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tRunFile`
+--
+
 DROP TABLE IF EXISTS `tRunFile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -870,8 +1069,13 @@ CREATE TABLE `tRunFile` (
   PRIMARY KEY (`id`),
   KEY `rundataididx` (`rundataid`),
   KEY `rawididx` (`rawid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=30980 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tRunRes`
+--
+
 DROP TABLE IF EXISTS `tRunRes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -892,8 +1096,13 @@ CREATE TABLE `tRunRes` (
   `kernfile` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `rundatatestidx` (`testid`,`rundataid`,`decorrspace`,`predtype`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7325 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tRunResult`
+--
+
 DROP TABLE IF EXISTS `tRunResult`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -924,7 +1133,7 @@ CREATE TABLE `tRunResult` (
   `sigline` double(16,6) DEFAULT '0.000000',
   PRIMARY KEY (`id`),
   KEY `rundatatestidx` (`rundataid`,`decorrspace`,`predtype`,`fittype`,`preddata`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=104579 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -936,3 +1145,4 @@ CREATE TABLE `tRunResult` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+-- Dump completed on 2013-04-12  9:29:13

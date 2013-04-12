@@ -12,7 +12,7 @@ include_once "./celldb.php";
 
 <HTML>
 <HEAD>
-  <TITLE>celldb - Animal history</TITLE>
+  <TITLE>celldb - Cell list</TITLE>
   <link rel="shortcut icon" href="favicon.ico" />
 </HEAD>
 <?php

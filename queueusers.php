@@ -64,10 +64,11 @@ echo("<meta http-equiv=\"Refresh\" content=\"60; URL=$redirurl\">");
 <meta NAME="description" CONTENT="Queue users">
 
 <?php
-echo( "<b>Queue users</b>\n" );
-echo(" (<a href=\"queue/queuemasterlog.txt\">today's log</a>");
-echo(" <a href=\"queue/queuemasterlog.txt.1\">yesterday's log</a>");
-echo(" <a href=\"../svd/queue.htm\">help</a>)<br>");
+  //echo( "<b>Queue users</b>\n" );
+  //echo(" (<a href=\"queue/queuemasterlog.txt\">today's log</a>");
+  //echo(" <a href=\"queue/queuemasterlog.txt.1\">yesterday's log</a>");
+  //echo(" <a href=\"../svd/queue.htm\">help</a>)<br>");
+cellheader();
 
 // summary stats
 include "./queuesum.php";

@@ -174,10 +174,11 @@ echo("<meta http-equiv=\"Refresh\" content=\"60; URL=$redirurl\">");
 <meta NAME="description" CONTENT="Queue machine usage monitor">
 
 <?php
-echo( "<b>Queue machines</b>\n" );
-echo(" (<a href=\"queue/queuemasterlog.txt\">today's log</a>");
-echo(" <a href=\"queue/queuemasterlog.txt.1\">yesterday's log</a>");
-echo(" <a href=\"../svd/queue.htm\">help</a>)<br>");
+  //echo( "<b>Queue machines</b>\n" );
+  //echo(" (<a href=\"queue/queuemasterlog.txt\">today's log</a>");
+  //echo(" <a href=\"queue/queuemasterlog.txt.1\">yesterday's log</a>");
+  //echo(" <a href=\"../svd/queue.htm\">help</a>)<br>");
+cellheader();
 
 // summary stats
 include "./queuesum.php";
@@ -270,8 +271,8 @@ if (!$compdata) {
 // list each entry
 $sorturl="queuemachines.php?sessionid=$sessionid&userid=$userid&machinename=$machinename&allowqueuemaster=$allowqueuemaster&edmode=$edmode&orderby=";
 
-$loadsc=100;
-$keycount=3;
+$loadsc=50;
+$keycount=6;
 
 echo("<table>");
 
@@ -287,7 +288,7 @@ if (0==$edmode) {
   echo("  <td><b>&nbsp;<a href=\"" . $sorturl . "tComputer.load1\">load1/15</a></b>&nbsp;</td>\n");
   
   for ($ii=0; $ii<$keycount; $ii++) {
-    echo("  <td width=" . ($loadsc) . " align=right>" . ($ii+1) . ".0</td>\n");
+    echo("  <td width=" . ($loadsc-3) . " align=right>" . ($ii+1) . ".0</td>\n");
   }
 } else {
   // specs column headers
