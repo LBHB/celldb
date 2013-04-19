@@ -8,6 +8,15 @@ created 2002 - SVD
 $min_sec_level=6;
 include_once "./celldb.php";
 
+$penid=$_GET['penid'];
+$penname=$_GET['penname'];
+$bkmk=$_GET['bkmk'];
+$expand=$_GET['expand'];
+$animal=$_GET['animal'];
+$training=$_GET['training'];
+$showbad=$_GET['showbad'];
+//$=$_GET[''];
+
 // load data pre-existing data about the penetration -- if it exists
 if (-1==$penid or ""==$penid) {
    // only penname provided, see if it exists
@@ -20,7 +29,7 @@ if (-1==$penid or ""==$penid) {
 $pendata = mysql_query($sql);
 $pendatarows=mysql_num_rows($pendata);
 if ($pendatarows==0) {
-   header ("Location: $fnpenedit?userid=$userid&sessionid=$sessionid&penname=$penname&animal=$animal&training=$training&bkmk=$bkmk&expand=$expand");
+   header ("Location: $fnpenedit?penname=$penname&animal=$animal&training=$training&bkmk=$bkmk&expand=$expand");
    exit;                 /* Make sure that code below does not execute */
 }
 
@@ -69,21 +78,21 @@ if (1==$training) {
 }
 
 echo( "<p>$pencat <b>$penname</b>&nbsp;" );
-echo("&nbsp;(<a href=\"$fnpenedit?userid=$userid&sessionid=$sessionid&penname=$penname&action=1&bkmk=$bkmk\">");
+echo("&nbsp;(<a href=\"$fnpenedit?penname=$penname&action=1&bkmk=$bkmk\">");
 echo("Edit pen</a>)\n");
-echo("&nbsp;(<a href=\"$fnpendump?userid=$userid&sessionid=$sessionid&penname=$penname&bkmk=$bkmk\">");
+echo("&nbsp;(<a href=\"$fnpendump?penname=$penname&bkmk=$bkmk\">");
 echo("Dump</a>)\n");
-echo("&nbsp;(<a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$prevpenname&bkmk=" . ($bkmk-1) . "&expand=$expand\">");
+echo("&nbsp;(<a href=\"$fnpeninfo?penname=$prevpenname&bkmk=" . ($bkmk-1) . "&expand=$expand\">");
 echo("<-- $prevpenname</a>)\n");
 if (1==$penrow["training"]) {
-  echo("&nbsp;(<a href=\"celllist.php?userid=$userid&sessionid=$sessionid&showdata=behavior#$bkmk\">UP</a>)\n");
+  echo("&nbsp;(<a href=\"celllist.php?showdata=behavior#$bkmk\">UP</a>)\n");
 } else {
-  echo("&nbsp;(<a href=\"celllist.php?userid=$userid&sessionid=$sessionid&showdata=cells#$bkmk\">UP</a>)\n");
+  echo("&nbsp;(<a href=\"celllist.php?showdata=cells#$bkmk\">UP</a>)\n");
 }
-echo("&nbsp;(<a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$nextpenname&animal=" . $penrow["animal"] . "&training=" . $penrow["training"] . "&bkmk=" . ($bkmk+1) . "&expand=$expand\">");
+echo("&nbsp;(<a href=\"$fnpeninfo?penname=$nextpenname&animal=" . $penrow["animal"] . "&training=" . $penrow["training"] . "&bkmk=" . ($bkmk+1) . "&expand=$expand\">");
 echo("$nextpenname --></a>)\n");
 if (""!=$nextpenname && $lastpenname!=$nextpenname) {
-   echo("&nbsp;(<a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$lastpenname&animal=" . $penrow["animal"] . "&training=" . $penrow["training"] . "&bkmk=" . ($bkmk+1) . "&expand=$expand\">");
+   echo("&nbsp;(<a href=\"$fnpeninfo?penname=$lastpenname&animal=" . $penrow["animal"] . "&training=" . $penrow["training"] . "&bkmk=" . ($bkmk+1) . "&expand=$expand\">");
    echo("$lastpenname ->|</a>)\n");
 }
 echo("</p>\n");
@@ -94,18 +103,18 @@ $sql="SELECT round(weight,0) as weight,round(water,1) as water" .    " FROM gHea
 $hdata=mysql_query($sql); 
 
 echo("<table cellpadding=1>\n");
-echo("<tr><td colspan=2><b>Animal:</b></td><td><a href=\"animals.php?userid=$userid&sessionid=$sessionid&animal=$animal\">" . $penrow["animal"]. "</a>&nbsp;</td>\n");
+echo("<tr><td colspan=2><b>Animal:</b></td><td><a href=\"animals.php?animal=$animal\">" . $penrow["animal"]. "</a>&nbsp;</td>\n");
 echo("    <td><b>Well:</b></td><td>" . $penrow["well"]. "</td></tr>\n");
 echo("<tr><td colspan=2><b>Date:</b></td><td>" . $penrow["pendate"]. "&nbsp;</td>\n");
 echo("    <td><b>Who:</b></td><td>" . $penrow["who"]. "</td></tr>\n");
 echo("<tr><td colspan=2><b>Fix time:</b></td><td>" . $penrow["fixtime"]. "&nbsp;</td>\n");
 echo("    <td><b># channels:</b></td><td>" . $penrow["numchans"] * 1.0 . "&nbsp;</td></tr>\n"); 
 if ($hrow=mysql_fetch_array($hdata)) {
-  echo("<tr><td colspan=2><b>Water:</b></td><td><a href=\"celldbstats.php?userid=$userid&sessionid=$sessionid&animal=$animal&timeframe=&statcode=water\">" . $hrow["water"] . "&nbsp;ml</a></td>\n");
-  echo("    <td><b>Weight:</b></td><td><a href=\"celldbstats.php?userid=$userid&sessionid=$sessionid&animal=$animal&timeframe=&statcode=weight\">" . $hrow["weight"] * 1.0 . "&nbsp;$weightunits</a></td></tr>\n");
+  echo("<tr><td colspan=2><b>Water:</b></td><td><a href=\"celldbstats.php?animal=$animal&timeframe=&statcode=water\">" . $hrow["water"] . "&nbsp;ml</a></td>\n");
+  echo("    <td><b>Weight:</b></td><td><a href=\"celldbstats.php?animal=$animal&timeframe=&statcode=weight\">" . $hrow["weight"] * 1.0 . "&nbsp;$weightunits</a></td></tr>\n");
 }
 if ($expand=="pendetails") {
-   echo("<tr><td valign=top><a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$penname&bkmk=$bkmk\">-(Hide)</a></td><td><b>Ear:</b></td><td>" . $penrow["ear"] . "</td></tr>\n");
+   echo("<tr><td valign=top><a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk\">-(Hide)</a></td><td><b>Ear:</b></td><td>" . $penrow["ear"] . "</td></tr>\n");
    echo("<tr><td></td><td valign=top><b>Rack:</b></td><td colspan=3>" . $penrow["racknotes"] . "</td></tr>\n");
    echo("<tr><td></td><td valign=top><b>Probe:</b></td><td colspan=3><table><tr>\n");
    if (""!=$penrow["wellimfile"]) {
@@ -134,7 +143,7 @@ if ($expand=="pendetails") {
    echo("<tr><td></td><td><b>Added by:</b></td><td>" . $penrow["addedby"]. "&nbsp;</td>\n");
    echo("    <td><b>Last mod:</b></td><td>" . $penrow["lastmod"] . "</td></tr>\n");
 } else {
-   echo("<tr><td valign=top><a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$penname&bkmk=$bkmk&expand=pendetails\"><b>+ Show details</b></a>");
+   echo("<tr><td valign=top><a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=pendetails\"><b>+ Show details</b></a>");
 }
 echo("</table>" );
 $ppd=$penrow["etudeg"] * 1.0;
@@ -160,7 +169,7 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
      $rowcount=$rowcount+1;
      if ($rowcount==1) {
        echo("<tr><td><b>" . $cellcat . " ");
-       echo("<a href=\"$fncelledit?userid=$userid&sessionid=$sessionid&bkmk=$bkmk&masterid=$masterid&action=1\">" . $row["siteid"] . "</a>:</b></td>\n");
+       echo("<a href=\"$fncelledit?bkmk=$bkmk&masterid=$masterid&action=1\">" . $row["siteid"] . "</a>:</b></td>\n");
      } else {
        echo("<tr><td></td>\n");
      }
@@ -250,11 +259,11 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
      echo("<tr>\n");
      //echo(" <td>" . $row["task"] . "</td>\n");
      
-     //echo(" <td><a href=\"$fncellfileedit?userid=$userid&sessionid=$sessionid&bkmk=$bkmk&masterid=$masterid&rawid=$rawid&runclassid=$runclassid&action=1\">");
+     //echo(" <td><a href=\"$fncellfileedit?bkmk=$bkmk&masterid=$masterid&rawid=$rawid&runclassid=$runclassid&action=1\">");
      //echo($row["runclass"] . "</a></td>\n");
      echo(" <td>($rawid)</td>");
      
-     echo(" <td><a href=\"$fncellfileedit?userid=$userid&sessionid=$sessionid&bkmk=$bkmk&masterid=$masterid&rawid=$rawid&runclassid=$runclassid&action=1\">");
+     echo(" <td><a href=\"$fncellfileedit?bkmk=$bkmk&masterid=$masterid&rawid=$rawid&runclassid=$runclassid&action=1\">");
      echo("$parmfile</td>\n");
      //echo(" <td>$stimfile</td>\n");
 
@@ -310,9 +319,9 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
      $jpegfilebase=(str_replace(".m","",$row["parmfile"]));
      $jpegfilename=(str_replace(".m",".jpg",$row["parmfile"]));
      if ($expand=="parm" . $rawid) {
-       echo(" - <a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$penname&bkmk=$bkmk#" . $row["cellid"] . "\">PARMS</a>");
+       echo(" - <a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk#" . $row["cellid"] . "\">PARMS</a>");
      } else {
-       echo(" - <a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$penname&bkmk=$bkmk&expand=parm$rawid#" . $row["cellid"] . "\">parms</a>");
+       echo(" - <a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=parm$rawid#" . $row["cellid"] . "\">parms</a>");
      }
      $behavior_file="/var/www/celldb/behaviorcharts/" .
        strtolower($animal) . "/" . substr($pendate,0,4) . "/" .
@@ -379,10 +388,10 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
      }
    }
    echo("<tr><td></td><td></td>");
-   echo("    <td><a href=\"$fncellfileedit?userid=$userid&sessionid=$sessionid&bkmk=$bkmk&masterid=$masterid&rawid=-1&action=0\">");
+   echo("    <td><a href=\"$fncellfileedit?bkmk=$bkmk&masterid=$masterid&rawid=-1&action=0\">");
    echo("New file</a></td></tr>\n");
    echo("<tr><td></td><td></td>");
-   echo("    <td><a href=\"$fncelledit?userid=$userid&sessionid=$sessionid&bkmk=$bkmk&masterid=$masterid&action=1#Descent\">");
+   echo("    <td><a href=\"$fncelledit?bkmk=$bkmk&masterid=$masterid&action=1#Descent\">");
    echo("Post-descent</a></td></tr>\n");
    echo("</table>\n");
 }
@@ -393,7 +402,7 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
 <?php
 echo("<table cellpadding=1>\n");
 echo("<tr><td><b>" . $cellcat . ":</b> ");
-echo("<a href=\"$fncelledit?userid=$userid&sessionid=$sessionid&bkmk=$bkmk&masterid=-1&penid=$penid&action=0\">\n");
+echo("<a href=\"$fncelledit?bkmk=$bkmk&masterid=-1&penid=$penid&action=0\">\n");
 echo("New site</a></td>\n");
 echo("</tr>\n");
 echo("</table>\n");
@@ -403,18 +412,18 @@ echo("</table>\n");
 
 <?php
 echo( "$pencat <b>$penname</b>&nbsp;" );
-echo("&nbsp;(<a href=\"$fnpenedit?userid=$userid&sessionid=$sessionid&penname=$penname&action=1&bkmk=$bkmk\">");
+echo("&nbsp;(<a href=\"$fnpenedit?penname=$penname&action=1&bkmk=$bkmk\">");
 echo("Edit pen</a>)\n");
-echo("&nbsp;(<a href=\"$fnpendump?userid=$userid&sessionid=$sessionid&penname=$penname&bkmk=$bkmk\">");
+echo("&nbsp;(<a href=\"$fnpendump?penname=$penname&bkmk=$bkmk\">");
 echo("Dump</a>)\n");
-echo("&nbsp;(<a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$prevpenname&bkmk=" . ($bkmk-1) . "\">");
+echo("&nbsp;(<a href=\"$fnpeninfo?penname=$prevpenname&bkmk=" . ($bkmk-1) . "\">");
 echo("<-- $prevpenname</a>)\n");
 if (1==$penrow["training"]) {
-  echo("&nbsp;(<a href=\"celllist.php?userid=$userid&sessionid=$sessionid&showdata=behavior#$bkmk\">UP</a>)\n");
+  echo("&nbsp;(<a href=\"celllist.php?showdata=behavior#$bkmk\">UP</a>)\n");
 } else {
-  echo("&nbsp;(<a href=\"celllist.php?userid=$userid&sessionid=$sessionid&showdata=cells#$bkmk\">UP</a>)\n");
+  echo("&nbsp;(<a href=\"celllist.php?showdata=cells#$bkmk\">UP</a>)\n");
 }
-echo("&nbsp;(<a href=\"$fnpeninfo?userid=$userid&sessionid=$sessionid&penname=$nextpenname&bkmk=" . ($bkmk+1) . "\">");
+echo("&nbsp;(<a href=\"$fnpeninfo?penname=$nextpenname&bkmk=" . ($bkmk+1) . "\">");
 echo("$nextpenname --></a>)\n");
 
 cellfooter("<em>This page refreshes every 30 seconds.</em>");

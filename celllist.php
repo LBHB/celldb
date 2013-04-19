@@ -8,6 +8,14 @@ mod 2006-05-24 - merged in behavior/weight list as option view
 
 // global include: connect to db and get important basic info about user prefs
 include_once "./celldb.php";
+
+//$animal=$_GET['animal'];
+//$queryspecies=$_GET['queryspecies'];
+//$recstat=$_GET['recstat'];
+//$well=$_GET['well'];
+//$showdata=$_GET['showdata'];
+//$=$_GET[''];
+
 ?>
 
 <HTML>

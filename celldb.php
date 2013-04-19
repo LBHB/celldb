@@ -287,6 +287,7 @@ function cellheader($rpath="") {
   
   global $siteinfo;
   global $userid;
+  global $animal;
   
   $ss=explode(".",getenv("SCRIPT_NAME"));
   $ss=explode("/",$ss[0]);
@@ -570,4 +571,7 @@ if ("eye"==$view) {
   $fncellfilelist="cellfilelist.php";
  }
 
+// yes, very insecure!  I know.  SVD
+extract($_GET);
+extract($_POST);
 ?>
