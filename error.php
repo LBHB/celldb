@@ -16,7 +16,9 @@ created 2005-10-10 - SVD
 <?php
 
 //automatically parse html posted variables (i think?)
-import_request_variables("GP", "");
+//import_request_variables("GP", "");
+$errormsg=$_GET['errormsg'];
+$refurl=$_GET['refurl'];
 
 echo("<p>celldb problem:</p>");
 

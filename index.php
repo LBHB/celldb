@@ -1,8 +1,8 @@
 <?php
 //automatically parse html posted variables (i think?)
-import_request_variables("GP", "");
+//import_request_variables("GP", "");
 
-if (1==$logout) {
+if (1==$_GET['logout']) {
   // global include: connect to db and get basic info about user prefs
   include_once "./celldb.php";
   

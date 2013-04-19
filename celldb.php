@@ -405,7 +405,8 @@ $siteinfo="CELLDB v0.5";
 //error_reporting(E_ALL & ~E_NOTICE);
 
 // automatically parse html posted variables (i think?)
-import_request_variables("GP", "");
+//import_request_variables("GP", "");
+extract($_REQUEST, EXTR_PREFIX_ALL|EXTR_REFS, '');
 
 // initial db connection needed basically for anything
 //$dbcnx=mysql_connect($dbserver.":3306",$dbuser,$dbpassword);
