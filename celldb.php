@@ -112,8 +112,8 @@ function checkpwd($userid,$passwd) {
       header("Location: $refpage?reqfmt=1");
       exit;
     } else {
-      echo("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
-      //header("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
+      echo("Location: index.php?errormsg=".rawurlencode($errormsg));
+      //header("Location: index.php?errormsg=".rawurlencode($errormsg));
       //$_SESSION["sessuserid"]="guest";
       //$_SESSION["sesssessionid"]="";
       //return 0;
