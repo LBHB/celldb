@@ -112,8 +112,7 @@ function checkpwd($userid,$passwd) {
       header("Location: $refpage?reqfmt=1");
       exit;
     } else {
-      echo("Location: index.php?errormsg=".rawurlencode($errormsg));
-      //header("Location: index.php?errormsg=".rawurlencode($errormsg));
+      header("Location: index.php?errormsg=".rawurlencode($errormsg));
       //$_SESSION["sessuserid"]="guest";
       //$_SESSION["sesssessionid"]="";
       //return 0;
@@ -121,7 +120,9 @@ function checkpwd($userid,$passwd) {
     }
     
   } else {
-    header("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
+    echo("Location: index.php?errormsg=".rawurlencode($errormsg));
+
+    //header("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
     //$_SESSION["sessuserid"]="guest";
     //$_SESSION["sesssessionid"]="";
     //return 0;
@@ -407,7 +408,7 @@ $siteinfo="CELLDB v0.5";
 
 // automatically parse html posted variables (i think?)
 //import_request_variables("GP", "");
-extract($_REQUEST, EXTR_PREFIX_ALL|EXTR_REFS, '');
+extract($_REQUEST);
 
 // initial db connection needed basically for anything
 //$dbcnx=mysql_connect($dbserver.":3306",$dbuser,$dbpassword);
