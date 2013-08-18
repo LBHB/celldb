@@ -246,20 +246,25 @@ while ( $row = mysql_fetch_array($queuedata) ) {
   } elseif (0==$row["complete"] && ($seclevel>=5 || ($row["user"]==$userid && $seclevel>0))) {
     echo("   <td>&nbsp;" . $sorturl . $orderby . "&action=-1&target=" . $row["id"] . "\">DELETE</a>&nbsp;</td>");
   } elseif (-1==$row["complete"] && ($seclevel>=5 || ($row["user"]==$userid && $seclevel>0))) {
-    echo("   <td>&nbsp;" . $sorturl . $orderby . "&action=-2&target=" . $row["id"] . "\">KILL</a>&nbsp;</td>");
+    if ($row["killnow"]>0) {
+      echo("   <td>&nbsp;Kill Pending&nbsp;</td>");
+    } else {
+      echo("   <td>&nbsp;" . $sorturl . $orderby . "&action=-2&target=" . $row["id"] . "\">KILL</a>&nbsp;</td>");
+    }
   } else {
     echo("   <td></td>\n");
   }
   
+  $subdir=floor(1.0*$row["id"]/1000)*1000;
   if (0==$row["complete"]) {
     echo("   <td>&nbsp;</td>\n");
   } elseif (1==$row["complete"]) {
-    echo("   <td><a href=\"queue/" . $row["id"]. ".out\">DUMP</a>&nbsp;\n");
-    echo("<a href=\"queue/" . $row["id"]. ".1.jpg\">1</a>&nbsp;\n");
-    echo("<a href=\"queue/" . $row["id"]. ".2.jpg\">2</a>&nbsp;\n");
-    echo("<a href=\"queue/" . $row["id"]. ".3.jpg\">3</a>&nbsp;</td>\n");
+    echo("   <td><a href=\"queue/" . $subdir . "/" . $row["id"]. ".out\">DUMP</a>&nbsp;\n");
+    echo("<a href=\"queue/" . $subdir . "/" . $row["id"]. ".1.jpg\">1</a>&nbsp;\n");
+    echo("<a href=\"queue/" . $subdir . "/" . $row["id"]. ".2.jpg\">2</a>&nbsp;\n");
+    echo("<a href=\"queue/" . $subdir . "/" . $row["id"]. ".3.jpg\">3</a>&nbsp;</td>\n");
   } else {
-    echo("   <td><a href=\"queue/" . $row["id"]. ".out\">DUMP</a>&nbsp;</td>\n");
+    echo("   <td><a href=\"queue/" . $subdir . "/" . $row["id"]. ".out\">DUMP</a>&nbsp;</td>\n");
   }
   
   echo("</tr>\n");

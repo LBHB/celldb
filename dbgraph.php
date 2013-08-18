@@ -183,6 +183,8 @@ include_once "./celldb.php";
     
     function generateChartHtml() {
       
+      $maxbarheight=($this->height-($this->upspace + $this->bottomspace));
+
       if ($this->width > 0) {
         echo("<table cellspacing=0 border=1 width=" . $this->width . ">\n");
       } else {
@@ -200,7 +202,7 @@ include_once "./celldb.php";
                 "images/black.jpg",
                 "images/orange.jpg","images/purple.jpg","images/lblue.jpg");
       
-      echo("<td valign=top align=right>\n");
+      echo("<td valign=top align=right height=\"".round($maxbarheight/($this->leftlegend+1))."\">\n");
       echo(round($this->highestvalue,2) . "</td>\n");
       
       for($i=0;$i<count($this->barheight[0]);$i++){
@@ -225,7 +227,7 @@ include_once "./celldb.php";
       
       // rest of number axis
       for($i=1;$i<=$this->leftlegend;$i++){
-        echo("<tr><td valign=top align=right>\n");
+        echo("<tr><td valign=top align=right height=\"".round($maxbarheight/($this->leftlegend+1))."\">\n");
         echo(round($this->highestvalue-($this->valueincrement*$i),2) . "</td></tr>\n");
       }
       

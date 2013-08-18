@@ -143,27 +143,60 @@ if ($expand=="pendetails") {
    echo("<tr><td></td><td><b>Added by:</b></td><td>" . $penrow["addedby"]. "&nbsp;</td>\n");
    echo("    <td><b>Last mod:</b></td><td>" . $penrow["lastmod"] . "</td></tr>\n");
 } else {
-   echo("<tr><td valign=top><a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=pendetails\"><b>+ Show details</b></a>");
+   echo("<tr><td valign=top><a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=pendetails\"><b>+ Show details</b></a></tr>\n");
 }
+
+// find sites associated with this penetration
+$celldata = mysql_query("SELECT * FROM gCellMaster WHERE penid=$penid" .
+                        " ORDER BY cellid, id");
+echo("<tr><td valign=top><b>Sites:</b></td><td>");
+while ( $cellrow = mysql_fetch_array($celldata) ) {
+    echo("<a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=".$cellrow["cellid"]."#".$cellrow["cellid"]."\">" . 
+         $cellrow["cellid"] . "</a> ");
+}
+echo("</td></tr>\n");
 echo("</table>" );
-$ppd=$penrow["etudeg"] * 1.0;
 
 
 // load cells associated with this penetration
 $celldata = mysql_query("SELECT * FROM gCellMaster WHERE penid=$penid" .
                         " ORDER BY cellid, id");
 
-
 while ( $cellrow = mysql_fetch_array($celldata) ) {
    $masterid=$cellrow["id"];
    echo("<HR ALIGN=CENTER SIZE=1 WIDTH=100% NOSHADE>\n");
    echo("<a name=\"" . $cellrow["cellid"] . "\"></a>"); 
    
+   echo("<table cellpadding=1>\n");
+   echo("<tr><td valign=\"top\"><b>" . $cellcat . " ");
+   echo("<a href=\"$fncelledit?bkmk=$bkmk&masterid=$masterid&action=1\">" . $cellrow["siteid"] . 
+        "</a>:</b>&nbsp;</td>\n");
+   if ($expand==$cellrow["siteid"]) {
+      echo("<td>");
+      
+      $depth=explode(",",$cellrow["depth"]);
+      $area=explode(",",$cellrow["area"]);
+      $bf=explode(",",$cellrow["bf"]);
+      echo("<table border=1 cellpadding=1 cellspacing=0><tr>");
+      echo("<td valign=bottom>Area:<br>Depth:&nbsp;<br>BF:</td>");
+      for ($ii=0;$ii<count($depth);$ii++) {
+        echo("<td><b>C".($ii+1)."</b><br>".$area[$ii]."<br>".$depth[$ii]."<br>".$bf[$ii]."</td>");
+      }
+      echo("</tr></table>\n");
+
+      echo(stringfilt($cellrow["comments"]));
+      echo(" <a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=#".$cellrow["cellid"]."\"><b>- Less</b></a>");
+   } else {
+      $scomment=substr($cellrow["comments"],0,100);
+      echo("<td>".stringfilt($scomment));
+      echo(" <a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=" . $cellrow["siteid"]."#".$cellrow["cellid"] . "\"><b>+ More</b></a>");
+   }
+   echo("</td>");
+   echo("</tr>\n");
+/*
    $singledata = mysql_query("SELECT * FROM gSingleCell" .
                              " WHERE masterid=$masterid" .
                              " ORDER BY cellid,id");
-   
-   echo("<table cellpadding=1>\n");
    $rowcount=0;
    while ( $row = mysql_fetch_array($singledata) ) {
      $rowcount=$rowcount+1;
@@ -183,6 +216,7 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
      }
      echo("</td>\n</tr>\n");
    }
+*/
    echo("</table>\n");
    
    //sort on last three characters of file name

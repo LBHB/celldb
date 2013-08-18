@@ -29,7 +29,7 @@ if (""==$statcode) {
   $statcode="Jobs Completed";
 }
 if (""==$timeframe) {
-  $timeframe="day";
+  $timeframe="hour";
 }
 if (""==$cat1) {
   $cat1="";
