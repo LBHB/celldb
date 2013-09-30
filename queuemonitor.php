@@ -49,7 +49,15 @@ if (0!=$action && $target>0) {
       //echo("Reseting queue id $target<br>");
       $sql="UPDATE tQueue SET complete=0 WHERE id=$target";
       $compdata=mysql_query($sql);
-    } else {
+    } elseif (3==$action) {
+      //echo("Increasing priority for id $target<br>");
+      $sql="UPDATE tQueue SET priority=priority+1 WHERE id=$target";
+      $compdata=mysql_query($sql);
+    } elseif (4==$action) {
+      //echo("Decreasing priority for id $target<br>");
+      $sql="UPDATE tQueue SET priority=priority-1 WHERE id=$target";
+      $compdata=mysql_query($sql);
+     } else {
       //echo("Insufficient security level for requested action<br>");
     }
   }
@@ -143,7 +151,7 @@ echo("</FORM>");
 // query celldb for queue entries matching search criteria
 
 if (-2==$complete) {
-  $sql="SELECT *,(time_to_sec(lastdate)-time_to_sec(startdate)) as duration" .
+  $sql="SELECT *,(to_days(lastdate)*3600*24+time_to_sec(lastdate)-to_days(startdate)*3600*24-time_to_sec(startdate)) as duration" .
     " FROM tQueue" .
     " WHERE user like \"$user\"" .
     " AND note like \"%$notemask%\"" .
@@ -151,7 +159,7 @@ if (-2==$complete) {
     " OR (\"%\"=\"$machinename\" AND isnull(machinename)))" .
     " ORDER BY $orderby";
 } else {
-  $sql="SELECT *,(time_to_sec(lastdate)-time_to_sec(startdate)) as duration" .
+  $sql="SELECT *,(to_days(lastdate)*3600*24+time_to_sec(lastdate)-to_days(startdate)*3600*24-time_to_sec(startdate)) as duration" .
     " FROM tQueue" .
     " WHERE user like \"$user\"" .
     " AND note like \"%$notemask%\"" .
@@ -241,10 +249,15 @@ while ( $row = mysql_fetch_array($queuedata) ) {
   }
   
   if ((1==$row["complete"] || 2==$row["complete"]) && ($seclevel>=5 || ($row["user"]==$userid && $seclevel>0))) {
+    // COMPLETE or DEAD
     echo("   <td>&nbsp;" . $sorturl . $orderby . "&action=-1&target=" . $row["id"] . "\">DELETE</a>&nbsp;");
     echo($sorturl . $orderby . "&action=1&target=" . $row["id"] . "\">RESET</a>&nbsp;</td>");
   } elseif (0==$row["complete"] && ($seclevel>=5 || ($row["user"]==$userid && $seclevel>0))) {
+    // NOT STARTED
     echo("   <td>&nbsp;" . $sorturl . $orderby . "&action=-1&target=" . $row["id"] . "\">DELETE</a>&nbsp;</td>");
+    echo("<td>" . $sorturl . $orderby . "&action=3&target=" . $row["id"] . "\">PRI+</a>&nbsp;");
+    echo("&nbsp;" . $sorturl . $orderby . "&action=4&target=" . $row["id"] . "\">-</a>&nbsp;</td>");
+
   } elseif (-1==$row["complete"] && ($seclevel>=5 || ($row["user"]==$userid && $seclevel>0))) {
     if ($row["killnow"]>0) {
       echo("   <td>&nbsp;Kill Pending&nbsp;</td>");

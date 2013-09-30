@@ -70,8 +70,8 @@ $tpenrow=mysql_fetch_array($lastpendata);
 $lastpenname=$tpenrow["penname"];
 
 if (1==$training) {
-  $pencat="Training session";
-  $cellcat="Pseudo-site";
+  $pencat="Training day";
+  $cellcat="Training set";
 } else {
   $pencat="Penetration";
   $cellcat="Site";
@@ -172,24 +172,39 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
    echo("<a href=\"$fncelledit?bkmk=$bkmk&masterid=$masterid&action=1\">" . $cellrow["siteid"] . 
         "</a>:</b>&nbsp;</td>\n");
    if ($expand==$cellrow["siteid"]) {
-      echo("<td>");
-      
-      $depth=explode(",",$cellrow["depth"]);
-      $area=explode(",",$cellrow["area"]);
-      $bf=explode(",",$cellrow["bf"]);
-      echo("<table border=1 cellpadding=1 cellspacing=0><tr>");
-      echo("<td valign=bottom>Area:<br>Depth:&nbsp;<br>BF:</td>");
-      for ($ii=0;$ii<count($depth);$ii++) {
-        echo("<td><b>C".($ii+1)."</b><br>".$area[$ii]."<br>".$depth[$ii]."<br>".$bf[$ii]."</td>");
-      }
-      echo("</tr></table>\n");
-
-      echo(stringfilt($cellrow["comments"]));
-      echo(" <a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=#".$cellrow["cellid"]."\"><b>- Less</b></a>");
+     if (""!=$penrow["wellimfile"]) {
+       $wellimfile=str_replace("/auto/data/nsl/common/photos/","photo/",
+                               $penrow["wellimfile"]);
+       if (!isset($showdata)){$showdata="bf";}
+       echo("<td><img width=\"300\" src=\"wellimage.php?siteid=".
+            $cellrow["siteid"]."&showdata=$showdata\"></td>\n");
+     }
+     echo("<td valign=top>");
+     $depth=explode(",",$cellrow["depth"]);
+     $area=explode(",",$cellrow["area"]);
+     $bf=explode(",",$cellrow["bf"]);
+     echo("<table border=1 cellpadding=1 cellspacing=0><tr>");
+     echo("<td valign=bottom>");
+     echo("<a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=" . 
+          $cellrow["siteid"]."&showdata=area#".$cellrow["cellid"] . 
+          "\">Area:</a><br>");
+     echo("<a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=" . 
+          $cellrow["siteid"]."&showdata=depth#".$cellrow["cellid"] . 
+          "\">Depth:</a><br>");
+     echo("<a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=" . 
+          $cellrow["siteid"]."&showdata=bf#".$cellrow["cellid"] . 
+          "\">BF:</a></td>");
+     for ($ii=0;$ii<count($depth);$ii++) {
+       echo("<td><b>C".($ii+1)."</b><br>".$area[$ii]."<br>".$depth[$ii]."<br>".$bf[$ii]."</td>");
+     }
+     echo("</tr></table>\n");
+     
+     echo(stringfilt($cellrow["comments"]));
+     echo(" <a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=#".$cellrow["cellid"]."\"><b>- Less</b></a>");
    } else {
-      $scomment=substr($cellrow["comments"],0,100);
-      echo("<td>".stringfilt($scomment));
-      echo(" <a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=" . $cellrow["siteid"]."#".$cellrow["cellid"] . "\"><b>+ More</b></a>");
+     $scomment=substr($cellrow["comments"],0,100);
+     echo("<td>".stringfilt($scomment));
+     echo(" <a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=" . $cellrow["siteid"]."#".$cellrow["cellid"] . "\"><b>+ More</b></a>");
    }
    echo("</td>");
    echo("</tr>\n");
@@ -229,11 +244,12 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
      $badwhere="";
    } else {
      $badstr="(<a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=$expand&showbad=1#" . $cellrow["cellid"] ."\">+Show bad files</a>)"; 
-     $badwhere=" AND not(bad)";
+     $badwhere=" AND not(gDataRaw.bad)";
    }
-   $sql="SELECT * FROM gDataRaw" .
-     " WHERE masterid=$masterid $badwhere" .
-     " ORDER BY id,respfile,parmfile";
+   $sql="SELECT gDataRaw.*,gData.value FROM gDataRaw" .
+     " LEFT JOIN gData ON gDataRaw.id=gData.rawid AND gData.name='DiscriminationIndex'".
+     " WHERE gDataRaw.masterid=$masterid $badwhere" .
+     " ORDER BY gDataRaw.id,gDataRaw.respfile,gDataRaw.parmfile";
    $rawfiledata = mysql_query($sql);
    //echo($sql . "<br>");
 
@@ -242,11 +258,11 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
    //echo("<td><b>Task</b></td>");
    //echo("<td><b>Class</b></td>\n");
    echo("<td><b>(RawID)</b></td>");
-   echo("<td><b>Resp file</b></td>");
-   //echo("<td><b>Stim</b></td>");
    if (1==$penrow["training"]) {
-      echo("<td><b>Perf</b></td>");
+     echo("<td><b>Parameter file</b></td>");
+     echo("<td><b>Trials (Perf)</b></td>");
    } else {
+     echo("<td><b>Parmeter file</b></td>");
      echo("<td><b>Trials (Reps)</b></td>");
    }
    
@@ -302,14 +318,19 @@ while ( $cellrow = mysql_fetch_array($celldata) ) {
      //echo(" <td>$stimfile</td>\n");
 
      if (1==$penrow["training"]) {
-        if ($row["trials"]>0) {
-           echo(" <td>" . $row["corrtrials"] . "/" . $row["trials"] . " (" .
-                round($row["corrtrials"]/ $row["trials"] *100) . "%)</td>\n");
-        } else {
-           echo(" <td align=\"center\">--</td>\n");
-        }
+       if ($row["value"]>0){
+           echo(" <td>".$row["trials"]." (DI=".$row["value"].")</td>\n");
+
+       } elseif ($row["trials"]>0) {
+         echo(" <td>" . $row["corrtrials"] . "/" . $row["trials"] . " (" .
+              round($row["corrtrials"]/ $row["trials"] *100) . "%)</td>\n");
+       } else {
+         echo(" <td align=\"center\">--</td>\n");
+       }
      } else {
-        if ($row["trials"]>0 && $row["corrtrials"]>0) {
+       if ($row["value"]>0){
+           echo(" <td>".$row["trials"]." (DI=".$row["value"].")</td>\n");
+       } elseif ($row["trials"]>0 && $row["corrtrials"]>0) {
            echo(" <td>" . $row["corrtrials"] . "/" . $row["trials"] . " (" .
                 round($row["corrtrials"]/ $row["trials"] *100) . "%)</td>\n");
         } elseif ($row["trials"]>0) {
