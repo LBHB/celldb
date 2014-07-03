@@ -62,14 +62,14 @@ cellheader();
 <tr><td>
 <FORM ACTION="tools.php" METHOD=get>
   <b>Band Calculator</b><br>
-  Center frequency (Hz): <INPUT TYPE=text NAME="f0" value="<? echo($f0); ?>"><br>
-  Bandwidth (oct): <INPUT TYPE=text NAME="bw" value="<? echo($bw); ?>"><br>
+  Center frequency (Hz): <INPUT TYPE=text NAME="f0" value="<?php echo($f0); ?>"><br>
+  Bandwidth (oct): <INPUT TYPE=text NAME="bw" value="<?php echo($bw); ?>"><br>
 <INPUT TYPE=SUBMIT VALUE="GO">
 </FORM>
 </td>
   <td>&nbsp;&nbsp;</td>
 <td>
-<? 
+<?php 
   if ($f0>0 && $bw>0){
     //$fhi=quadratic(1,-$f0*($bw)*1.5/2,-$f0*$f0,'root1');
     //$flo=quadratic(1,$f0*($bw)*1.5/2,-$f0*$f0,'root1');

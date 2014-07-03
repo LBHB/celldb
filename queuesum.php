@@ -23,9 +23,35 @@ if (""==$complete && ""!=$lastjobcomplete) {
 if (""==$machinename) {
   $machinename="%";
 }
+if (-2==$complete) {
+  $sql="SELECT *,(to_days(lastdate)*3600*24+time_to_sec(lastdate)-to_days(startdate)*3600*24-time_to_sec(startdate)) as duration" .
+    " FROM tQueue" .
+    " WHERE user like \"$user\"" .
+    " AND note like \"%$notemask%\"" .
+    " AND (machinename like \"$machinename\"" .
+    " OR (\"%\"=\"$machinename\" AND isnull(machinename)))" .
+    " ORDER BY $orderby";
+} else {
+  $sql="SELECT *,(to_days(lastdate)*3600*24+time_to_sec(lastdate)-to_days(startdate)*3600*24-time_to_sec(startdate)) as duration" .
+    " FROM tQueue" .
+    " WHERE user like \"$user\"" .
+    " AND note like \"%$notemask%\"" .
+    " AND (machinename like \"$machinename\"" .
+    " OR (\"%\"=\"$machinename\" AND isnull(machinename)))" .
+    " AND complete=$complete" .
+    " ORDER BY $orderby";
+}
 
+if ("%"==$machinename && ""==$notemask) {
+  $sql="SELECT complete,count(id) as activecount FROM tQueue WHERE user like \"$user\" GROUP BY complete ORDER BY complete";
+} elseif ("%"==$machinename) {
+  $sql="SELECT complete,count(id) as activecount FROM tQueue WHERE user like \"$user\" AND note like \"%$notemask%\" GROUP BY complete ORDER BY complete";
+} elseif (""==$notemask) {
+  $sql="SELECT complete,count(id) as activecount FROM tQueue WHERE user like \"$user\" AND machinename like \"$machinename\" GROUP BY complete ORDER BY complete";
+} else {
+  $sql="SELECT complete,count(id) as activecount FROM tQueue WHERE user like \"$user\" AND machinename like \"$machinename\" AND note like \"%$notemask%\" GROUP BY complete ORDER BY complete";
+}
 
-$sql="SELECT complete,count(id) as activecount FROM tQueue WHERE user like \"$user\" GROUP BY complete ORDER BY complete";
 $activedata=mysql_query($sql);
 $userjobcount=array(0,0,0,0,0);
 while ( $row = mysql_fetch_array($activedata) ) {
@@ -39,12 +65,13 @@ while ( $row = mysql_fetch_array($activedata) ) {
   $jobcount[($row["complete"]+2)]=$row["activecount"];
 }
 
-echo("<a href=\"queuemonitor.php?userid=$userid&sessionid=$sessionid&user=$user&complete=$complete&notemask=" . rawurlencode($notemask) . "\">");
+echo("<a href=\"queuemonitor.php?userid=$userid&sessionid=$sessionid&user=$user&complete=$complete&notemask=" .
+     rawurlencode($notemask) . "&machinename=$machinename\">");
 echo("Jobs:</a>  ");
 for ($ii=1; $ii<count($compstrings); $ii++) {
   echo("<a href=\"queuemonitor.php?userid=$userid&sessionid=$sessionid&");
   echo("user=$user&complete=" . ($ii-2) . "&notemask=" . 
-       rawurlencode($notemask) . "\">");
+       rawurlencode($notemask) . "&machinename=$machinename\">");
   echo($userjobcount[($ii)] . "/" . $jobcount[($ii)] . " " . 
        $compstrings[$ii] . "</a> / ");
 }

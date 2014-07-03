@@ -102,14 +102,22 @@ echo("</td></tr></table>\n");
 
 // query celldb for queue entries matching search criteria
 
-$sql="SELECT gUserPrefs.*,count(tQueue.id) as jobcount," .
-     " sum(tQueue.complete in (0,-1)) as activejobs".
-     " FROM gUserPrefs LEFT JOIN tQueue" .
-     " ON gUserPrefs.userid=tQueue.user" .
-     " GROUP BY gUserPrefs.id" .
-     " HAVING activejobs>0 OR " . (1-$activeusers) .
-     " ORDER BY $orderby";
-//     " HAVING jobcount>0 OR " . (1-$activeusers)
+if ($activeusers) {
+  $sql="SELECT gUserPrefs.*,count(tQueue.id) as jobcount," .
+    " sum(tQueue.complete in (0,-1)) as activejobs".
+    " FROM tQueue LEFT JOIN gUserPrefs" .
+    " ON gUserPrefs.userid=tQueue.user" .
+    " GROUP BY tQueue.user" .
+    " HAVING activejobs>0" .
+    " ORDER BY $orderby";
+} else {
+  $sql="SELECT gUserPrefs.*,count(tQueue.id) as jobcount," .
+    " sum(tQueue.complete in (0,-1)) as activejobs".
+    " FROM gUserPrefs LEFT JOIN tQueue" .
+    " ON gUserPrefs.userid=tQueue.user" .
+    " GROUP BY gUserPrefs.id" .
+    " ORDER BY $orderby";
+}
 
 //echo("sql: $sql<br>\n");
 $userdata=mysql_query($sql);
@@ -152,7 +160,7 @@ while ( $row = mysql_fetch_array($userdata) ) {
   echo("   <td align=\"right\">" . $row["id"] . "&nbsp;</td>\n");
   
   $joburl="<a href=\"queuemonitor.php?userid=$userid&sessionid=$sessionid" .
-    "&user=" . $row["userid"] . "&complete=-2\">";
+    "&user=" . $row["userid"] . "&complete=-1\">";
   echo("   <td>$joburl" . $row["userid"] . "</a>&nbsp;</td>\n");
   echo("   <td>" . $row["lab"] . "&nbsp;</td>\n");
   
@@ -207,99 +215,34 @@ while ( $row = mysql_fetch_array($userdata) ) {
   
   echo("   </td>\n");
 
-  if (0) {  
-
-  echo("   <td>");
-  $sharestrings=array("Off","On","Cond");
-  if ($seclevel>=5 || $row["owner"]==$userid) {
-    // for users with high secrity level, allow editing machine status
-    echo("   <select OnChange=\"location.href=this.options[this.selectedIndex].value\">\n");
-    
-    $setstrings=array("","","");
-    $setstrings[$row["allowqueuemaster"]]="selected";
-    
-    for ($ii=0; $ii<count($sharestrings); $ii++) {
-      echo("    <option value=\"$sorturl$orderby&action=" . ($ii+1) . 
-           "&target=" . $row["id"] . "\" " . $setstrings[$ii] . ">" . 
-           $sharestrings[$ii] . "</option>\n");
-    }
-    echo("   </select>");
-    if ($row["allowqueuemaster"]>0) {
-      $maxproc=$row["maxproc"];
-      if ($maxproc>0) {
-        echo("&nbsp;" . "<a href=\"" . $sorturl . $orderby);
-        echo("&action=" . ($maxproc+9) . "&target=" . $row["id"] . "\">-1</a>");
-      }
-      if ($maxproc<6) {
-        echo("&nbsp;" . "<a href=\"" . $sorturl . $orderby);
-        echo("&action=" . ($maxproc+11) . "&target=" . $row["id"] . "\">+1</a>");
-      }
-    }
-  } else {
-    echo($sharestrings[$row["allowqueuemaster"]]);
-  }
-  echo("&nbsp;</td>\n");
-
-  echo("   <td align=\"center\">");
-  if (0==$row["allowqueuemaster"]) {
-    //not participating
-    echo("X");
-  } elseif ($seclevel>=5 || $row["owner"]==$userid) {
-    if (0==$row["allowothers"]) {
-      echo("<a href=\"" . $sorturl . $orderby . "&action=5&target=" . $row["id"] . "\">");
-      echo("N</a>");
-    } else {
-      echo("<a href=\"" . $sorturl . $orderby . "&action=4&target=" . $row["id"] . "\">");
-      echo("Y</a>");
-    }
-  } else {
-    if ($row["allowothers"]==0) {
-      echo("N");
-    } else {
-      echo("Y");
-    }
-  }
-  echo("&nbsp;</td>\n");
-  
-  echo("   <td align=\"center\">");
-  if ($row["numproc"] > 0) {
-    echo($row["numproc"] . "/" . $row["maxproc"] . "&nbsp;</td>\n");
-  } elseif ($row["allowqueuemaster"] > 0) {
-    echo("<font color=\"#999999\">0/" . $row["maxproc"] . 
-         "</font>&nbsp;</td>\n");
-  } else {
-    echo("<font color=\"#999999\">0/0</font>&nbsp;</td>\n");
-  }
-  
-  if (1==$row["lastoverload"] && 2==$row["allowqueuemaster"]) {
-    echo("   <td><font color=\"#CC0000\">" . sprintf("%.2f",$row["load1"]) .
-         "/" . sprintf("%.2f",$row["load15"]) .
-         "*</font>&nbsp;</td>\n");
-  } else {
-    echo("   <td>" . sprintf("%.2f",$row["load1"]) . 
-         "/" . sprintf("%.2f",$row["load15"]) .
-         "&nbsp;</td>\n");
-  }
-  
-  echo("   <td colspan=" . ($keycount+1) . ">");
-  $load=$row["load1"];
-  if (0==$row["allowqueuemaster"]) {
-    $fn="images/black.jpg";
-  } elseif (2==$row["allowqueuemaster"] && 1==$row["lastoverload"]) {
-    $fn="images/red.jpg";
-  } elseif (0==$row["numproc"]) {
-    $fn="images/green.jpg";
-  } else {
-    $fn="images/blue.jpg";
-  }
-  echo("<img border=0 src=\"$fn\" align=\"left\"");
-  echo("width=" . round($load*$loadsc+1) . " height=12>");
-  echo("</td>\n");
-
-
-  } // end if (0)
-
   echo("</tr>\n");
+
+  if ($jobrow["activecount"]>0){
+    $sql="SELECT substring(note,instr(note,\"/\")+1) as grp,".
+      " count(id) as total, sum(complete=0) as new,".
+      " sum(complete=1) as done,sum(complete=-1) as running,".
+      " sum(complete=2) as dead".
+      " FROM tQueue WHERE user=\"" . $row["userid"] . "\"".
+      " GROUP BY grp";
+    $jobdata=mysql_query($sql); 
+    while ($jr=mysql_fetch_array($jobdata)){
+      if ($jr["total"] > $jr["done"]) {
+        echo("<tr>");
+        $joburl="<a href=\"queuemonitor.php?userid=$userid" .
+                "&sessionid=$sessionid&user=" . $row["userid"] . 
+                "&complete=-1&notemask=". $jr["grp"]. "\">";
+        echo("<td colspan=\"5\">$joburl". $jr["grp"] . "</a></td>\n");
+        echo("<td colspan=\"4\">\n");
+        echo("New: " . $jr["new"] .
+             " - Running: " . $jr["running"] .
+             " - Done: " . $jr["done"] .
+             " - Dead: " . $jr["dead"] .
+             "<br>\n");
+        echo("</td>");
+        echo("</tr>\n");
+      } 
+    }
+  }
 }
 
 echo("<tr ><td></td><td></td><td></td><td></td>\n");

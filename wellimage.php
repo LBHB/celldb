@@ -40,10 +40,11 @@ if ($row=mysql_fetch_array($pendata)) {
   $sizepix=60;
   //$im     = imagecreate($sizepix,$sizepix);
   $im = imagecreatefromjpeg($coverfile); /* Attempt to open */
-
   //$background_color = imagecolorallocate($im, 255,255,255);
   //$ln_color = imagecolorallocate($im, 0,0,0);
   $text_color = imagecolorallocate($im, 255,255,255);
+  //imagestring($im, 2, 0,0, 
+  //            $coverfile, $text_color);
   
   $cc=explode("+",$row["wellposition"]);
   $bf=explode(",",$row["bf"]);

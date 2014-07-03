@@ -67,7 +67,12 @@ if (2==$action) {
    if (count($impedance) > 0) {
     $impedance=implode(",",$impedance);
    }
- 
+   for ($ii=0;$ii<count($ecoordinates);$ii++) {
+     $ecoordinates[$ii]=round($ecoordinates[$ii],2);
+   }
+   if (count($ecoordinates) > 0) {
+    $ecoordinates=implode(",",$ecoordinates);
+   }
   
    if (0==$pendatarows) {
       // ie, gPenetration entry doesn't exist yet. create a new
@@ -76,14 +81,14 @@ if (2==$action) {
         " (penname,animal,well,pendate,who,fixtime,water,weight,ear,".
         "mondist,etudeg,".
         "numchans,racknotes,speakernotes,probenotes,electrodenotes,".
-        "impedancenotes,stability,stabilitynotes,".
+        "ecoordinates,impedancenotes,stability,stabilitynotes,".
         "descentnotes,firstdepth,impedance,addedby,info,training)" .
         " VALUES (\"$penname\",\"$animal\",$well,\"$pendate\",".
         "\"$who\",\"$fixtime\",$water,$weight,\"$ear\",".
         "$mondist,$etudeg,".
         "$numchans,\"$racknotes\",\"$speakernotes\",".
         "\"$probenotes\",\"$electrodenotes\",".
-        "\"$impedancenotes\",".
+        "\"$ecoordinates\","."\"$impedancenotes\",".
         "$stability,\"$stabilitynotes\",\"$descentnotes\",\"$firstdepth\",".
         "\"$impedance\",".
         "\"$addedby\",\"$siteinfo\",$training)";
@@ -110,6 +115,7 @@ if (2==$action) {
        "speakernotes=\"$speakernotes\",".
        "probenotes=\"$probenotes\",".
        "electrodenotes=\"$electrodenotes\",".
+       "ecoordinates=\"$ecoordinates\",".
        "impedancenotes=\"$impedancenotes\",".
        "stability=$stability,".
        "stabilitynotes=\"$stabilitynotes\",".
@@ -200,7 +206,8 @@ if ($pendatarows>0) {
    $firstdepth=explode(",",$firstdepth);
    $impedance=$row["impedance"];
    $impedance=explode(",",$impedance);
- 
+   $ecoordinates=$row["ecoordinates"];
+   $ecoordinates=explode(",",$ecoordinates);
    
 } else {
    // guess what some parameters will be $animal and $well should be specified as input parameters
@@ -304,6 +311,7 @@ if ($pendatarows>0) {
    $fixtime=date("g:i a");
    $firstdepth="";
    $impedance="";
+   $ecoordinates="";
    
    $addedby=$userid;
    $sql="SELECT * FROM gPenetration WHERE animal='$animal' AND pendate='$pendate' AND training=2";
@@ -387,14 +395,44 @@ if ("eye"==$view) {
   echo("<tr><td>Fix time:</td><td><INPUT TYPE=TEXT SIZE=10 NAME=\"fixtime\" value=\"$fixtime\"></td>\n");
   echo("<td>Stim ear:</td><td><INPUT TYPE=TEXT SIZE=10 NAME=\"ear\" value=\"$ear\"></td></tr>\n");
   echo("<tr><td># Channels:</td><td><INPUT TYPE=TEXT SIZE=10 NAME=\"numchans\" value=\"$numchans\"></td></tr>\n");
- 
-
+  
   echo("<tr><td>Rack:</td><td colspan=3><textarea NAME=\"racknotes\" rows=2 cols=60>$racknotes</textarea></td></tr>\n");
   echo("<tr><td>Speaker:</td><td colspan=3><textarea NAME=\"speakernotes\" rows=2 cols=60>$speakernotes</textarea></td></tr>\n");
  }
 
 echo("<tr><td>Probe:</td><td colspan=3><textarea NAME=\"probenotes\" rows=2 cols=60>$probenotes</textarea></td></tr>\n");
 echo("<tr><td>Electrode:</td><td colspan=3><textarea NAME=\"electrodenotes\" rows=2 cols=60>$electrodenotes</textarea></td></tr>\n");
+$estring=array("AP","ML","DV","AP","ML","DV","Tilt","Rot");
+for ($ii=0; $ii<8; $ii++) {
+  if ($ii>count($ecoordinates)) {
+    $ecoordinates[$ii]="";
+  }
+}
+
+echo("<tr><td valign=\"top\" style=\"line-height:1.5\">MT zero:<br>MT position:</td><td colspan=1>");
+for ($ii=0; $ii<3; $ii++) {
+  echo($estring[$ii] . 
+       ":<INPUT TYPE=TEXT SIZE=3 NAME=\"ecoordinates[$ii]\" value=\"".
+       $ecoordinates[$ii] . "\">&nbsp;\n");
+}
+echo("<br>\n");
+for ($ii=3; $ii<6; $ii++) {
+  echo($estring[$ii] . 
+       ":<INPUT TYPE=TEXT SIZE=3 NAME=\"ecoordinates[$ii]\" value=\"".
+       $ecoordinates[$ii] . "\">&nbsp;\n");
+}
+echo("</td>\n");
+echo("<td valign=\"top\" style=\"line-height:1.5\">Tilt:<br>Rotation:</td><td colspan=1>");
+$ii=6;
+echo("<INPUT TYPE=TEXT SIZE=3 NAME=\"ecoordinates[$ii]\" value=\"".
+     $ecoordinates[$ii] . "\">&nbsp;\n");
+echo("<br>\n");
+$ii=7;
+echo("<INPUT TYPE=TEXT SIZE=3 NAME=\"ecoordinates[$ii]\" value=\"".
+     $ecoordinates[$ii] . "\">&nbsp;\n");
+echo("</td>\n");
+echo("</tr>\n");
+
 echo("<tr><td>Impedance:</td><td colspan=3>");
 for ($ii=0; $ii<$numchans; $ii++) {
   if ($ii<count($impedance)) {
@@ -402,7 +440,7 @@ for ($ii=0; $ii<$numchans; $ii++) {
   } else {
     $timp="";
   }
-  echo(($ii+1) . ":<INPUT TYPE=TEXT SIZE=2 NAME=\"impedance[$ii]\" value=\"".
+  echo(($ii+1) . ":<INPUT TYPE=TEXT SIZE=3 NAME=\"impedance[$ii]\" value=\"".
        $timp . "\">&nbsp;\n");
 }
 echo("</td>\n");
@@ -415,7 +453,7 @@ for ($ii=0; $ii<$numchans; $ii++) {
   } else {
     $tdepth="";
   }
-  echo(($ii+1) . ":<INPUT TYPE=TEXT SIZE=2 NAME=\"firstdepth[$ii]\" value=\"".
+  echo(($ii+1) . ":<INPUT TYPE=TEXT SIZE=3 NAME=\"firstdepth[$ii]\" value=\"".
        $tdepth . "\">&nbsp;\n");
 }
 echo("</td></tr>\n");

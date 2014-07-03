@@ -123,7 +123,34 @@ if ($expand=="pendetails") {
      //echo("<td><img src=\"" . ($wellimfile) . "\"></td>");
      echo("<td><img width=\"300\" src=\"wellimage.php?penid=".$penrow["id"]."\"></td>");
    }
-   echo("<td valign=\"top\">" . $penrow["probenotes"] . "</td></td></tr></table>\n");
+
+   echo("<td valign=\"top\">" . stringfilt($penrow["probenotes"]) . "<br>\n");
+   $ecoordinates=explode(",",$penrow["ecoordinates"]);
+   $estring=array("AP","ML","DV","AP","ML","DV","Tilt","Rot");
+   if (count($ecoordinates)>=6) {
+     echo("MT zero: ");
+     for ($ii=0; $ii<3; $ii++) {
+       echo($estring[$ii] . ": ". $ecoordinates[$ii] . " ");
+     }
+     echo("<br>\n");
+     echo("MT position: ");
+     for ($ii=3; $ii<6; $ii++) {
+       echo($estring[$ii] . ": ". $ecoordinates[$ii] . " ");
+     }
+     echo("<br>\n");
+     echo("Diff: ");
+     for ($ii=0; $ii<3; $ii++) {
+       echo($estring[$ii] .": ".($ecoordinates[$ii]-$ecoordinates[$ii+3])." ");
+     }
+     echo("<br>\n");
+   }
+   if (count($ecoordinates)>=8) {
+     for ($ii=6; $ii<8; $ii++) {
+       echo($estring[$ii] . ": ". $ecoordinates[$ii] . " ");
+     }
+   }
+   
+   echo("</td></td></tr></table>\n");
    echo("</td></tr>\n");
    echo("<tr><td></td><td valign=top><b>Electrode:</b></td><td colspan=3>" . $penrow["electrodenotes"] . "<br>\n");
    echo("</td></tr>\n");
@@ -149,7 +176,7 @@ if ($expand=="pendetails") {
 // find sites associated with this penetration
 $celldata = mysql_query("SELECT * FROM gCellMaster WHERE penid=$penid" .
                         " ORDER BY cellid, id");
-echo("<tr><td valign=top><b>Sites:</b></td><td>");
+echo("<tr><td valign=top><b>Sites:</b></td><td colspan=\"3\">");
 while ( $cellrow = mysql_fetch_array($celldata) ) {
     echo("<a href=\"$fnpeninfo?penname=$penname&bkmk=$bkmk&expand=".$cellrow["cellid"]."#".$cellrow["cellid"]."\">" . 
          $cellrow["cellid"] . "</a> ");

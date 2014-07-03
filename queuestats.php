@@ -17,10 +17,11 @@ echo("<meta http-equiv=\"Refresh\" content=\"60; URL=$redirurl\">");
 <meta NAME="description" CONTENT="Queue machine usage monitor">
 
 <?php
-echo( "<b>Queue statistics</b>\n" );
-echo(" (<a href=\"queue/queuemasterlog.txt\">today's log</a>");
-echo(" <a href=\"queue/queuemasterlog.txt.1\">yesterday's log</a>");
-echo(" <a href=\"../svd/queue.htm\">help</a>)<br>");
+  //echo( "<b>Queue statistics</b>\n" );
+  //echo(" (<a href=\"queue/queuemasterlog.txt\">today's log</a>");
+  //echo(" <a href=\"queue/queuemasterlog.txt.1\">yesterday's log</a>");
+  //echo(" <a href=\"../svd/queue.htm\">help</a>)<br>");
+cellheader();
 
 // summary stats
 include "./queuesum.php";
@@ -80,9 +81,9 @@ if ("hour"==$timeframe) {
 
 // figure out relevant users
 if ("Active Nodes"==$statcode) {
-  $sql="SELECT DISTINCT user $fromstr $datecrit AND user=\"queued\"";
+  $sql="SELECT DISTINCT user $fromstr $datecrit AND user<>\"queued\" AND user<>\"root\"";
 } else {
-  $sql="SELECT DISTINCT user $fromstr $datecrit AND user<>\"queued\"";
+  $sql="SELECT DISTINCT user $fromstr $datecrit AND user<>\"queued\" AND user<>\"root\"";
 }
 $userdata=mysql_query($sql);
 

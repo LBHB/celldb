@@ -120,7 +120,7 @@ function checkpwd($userid,$passwd) {
     }
     
   } else {
-    echo("Location: index.php?errormsg=".rawurlencode($errormsg));
+    header("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
 
     //header("Location: /celldb/index.php?errormsg=".rawurlencode($errormsg));
     //$_SESSION["sessuserid"]="guest";
@@ -486,11 +486,11 @@ if ((isset($min_sec_level) && $seclevel<$min_sec_level) ||
          "&refurl=celllist.php");
 }
 
+$testval=0;
 if (""!=$userid) {
    $userdata = mysql_query("SELECT * FROM gUserPrefs WHERE userid=\"$userid\"");
-   $rowcount=mysql_num_rows($userdata);
-   if ($rowcount>0) {
-     $userrow = mysql_fetch_array($userdata);
+   if ($userrow = mysql_fetch_array($userdata)) {
+     $testval=1;
      if (""==$animal) {
        $animal=$userrow["lastanimal"];
      }

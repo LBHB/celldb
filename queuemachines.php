@@ -50,13 +50,13 @@ if ((0!=$action && $target>0) || 21==$action) {
        8. set allowothers=0 (no sharing)
        9. set allowothers=1 (sharing)
        10. edit computer info
-       11-16. set max processes to 1-6 (ie, action minus 10)
+       11-18. set max processes to 1-8 (ie, action minus 10)
        21. add new computer
        22. switch nocheck status
      */
 
     // check requested action and make sure user has permission
-    if (11<=$action && 16>=$action) {
+    if (11<=$action && 18>=$action) {
       //echo("Setting max procs to " . ($action-10) . " for node $target<br>");
       $sql="UPDATE tComputer SET maxproc=" . ($action-10) ." WHERE id=$target";
       mysql_query($sql);
@@ -288,7 +288,7 @@ if (0==$edmode) {
   echo("  <td><b>&nbsp;<a href=\"" . $sorturl . "tComputer.load1\">load1/15</a></b>&nbsp;</td>\n");
   
   for ($ii=0; $ii<$keycount; $ii++) {
-    echo("  <td width=" . ($loadsc-3) . " align=right>" . ($ii+1) . ".0</td>\n");
+    echo("  <td width=" . ($loadsc-3) . " align=right>" . (($ii+1)*2) . ".0</td>\n");
   }
 } else {
   // specs column headers
@@ -375,7 +375,7 @@ while ( $row = mysql_fetch_array($compdata) ) {
         echo("&nbsp;" . "<a href=\"" . $sorturl . $orderby);
         echo("&action=" . ($maxproc+9) . "&target=" . $row["id"] . "\">-1</a>");
       }
-      if ($maxproc<6) {
+      if ($maxproc<8) {
         echo("&nbsp;" . "<a href=\"" . $sorturl . $orderby);
         echo("&action=" . ($maxproc+11) . "&target=" . $row["id"] . "\">+1</a>");
       }
@@ -457,32 +457,34 @@ while ( $row = mysql_fetch_array($compdata) ) {
       echo("<font color=\"#999999\">0/0</font>&nbsp;</td>\n");
     }
     
+    $load=$row["load1"];
     if (1==$row["lastoverload"] && 2==$row["allowqueuemaster"]) {
-      echo("   <td><font color=\"#CC0000\">" . sprintf("%.2f",$row["load1"]) .
+      echo("   <td><font color=\"#CC0000\">" . sprintf("%.2f",$load) .
            "/" . sprintf("%.2f",$row["load15"]) .
            "*</font>&nbsp;</td>\n");
     } else {
-      echo("   <td>" . sprintf("%.2f",$row["load1"]) . 
+      echo("   <td>" . sprintf("%.2f",$load) . 
            "/" . sprintf("%.2f",$row["load15"]) .
            "&nbsp;</td>\n");
     }
     
-    echo("   <td colspan=" . ($keycount+1) . ">");
-    $load=$row["load1"];
-    if ($load>$keycount) {
-      $load=$keycount;
-    }
     if (0==$row["allowqueuemaster"]) {
       $fn="images/black.jpg";
     } elseif (2==$row["allowqueuemaster"] && 1==$row["lastoverload"]) {
+      $fn="images/red.jpg";
+    } elseif ($load>$keycount*2) {
       $fn="images/red.jpg";
     } elseif (0==$row["numproc"]) {
       $fn="images/green.jpg";
     } else {
       $fn="images/blue.jpg";
     }
+    if ($load>$keycount*2) {
+      $load=$keycount*2;
+    }
+    echo("   <td colspan=" . ($keycount+1) . ">");
     echo("<img border=0 src=\"$fn\" align=\"left\"");
-    echo("width=" . round($load*$loadsc+1) . " height=12>");
+    echo("width=" . round(($load*$loadsc+1)/2) . " height=12>");
     echo("</td>\n");
   }
   
