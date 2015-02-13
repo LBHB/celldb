@@ -221,9 +221,9 @@ while ( $row = mysql_fetch_array($userdata) ) {
     $sql="SELECT substring(note,instr(note,\"/\")+1) as grp,".
       " count(id) as total, sum(complete=0) as new,".
       " sum(complete=1) as done,sum(complete=-1) as running,".
-      " sum(complete=2) as dead".
+      " sum(complete=2) as dead, round(avg(priority),0) as priority".
       " FROM tQueue WHERE user=\"" . $row["userid"] . "\"".
-      " GROUP BY grp";
+      " GROUP BY grp ORDER BY priority DESC, min(id)";
     $jobdata=mysql_query($sql); 
     while ($jr=mysql_fetch_array($jobdata)){
       if ($jr["total"] > $jr["done"]) {
@@ -231,7 +231,8 @@ while ( $row = mysql_fetch_array($userdata) ) {
         $joburl="<a href=\"queuemonitor.php?userid=$userid" .
                 "&sessionid=$sessionid&user=" . $row["userid"] . 
                 "&complete=-1&notemask=". $jr["grp"]. "\">";
-        echo("<td colspan=\"5\">$joburl". $jr["grp"] . "</a></td>\n");
+        echo("<td colspan=\"5\">$joburl". $jr["grp"] . "</a>(".
+             $jr["priority"].")</td>\n");
         echo("<td colspan=\"4\">\n");
         echo("New: " . $jr["new"] .
              " - Running: " . $jr["running"] .

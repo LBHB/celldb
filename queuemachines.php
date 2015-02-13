@@ -352,7 +352,7 @@ while ( $row = mysql_fetch_array($compdata) ) {
     // for users with high secrity level, allow editing machine status
     echo("   <select OnChange=\"location.href=this.options[this.selectedIndex].value\">\n");
     
-    $setstrings=array("","","");
+    $setstrings=array("","","","");
     $setstrings[$row["allowqueuemaster"]]="selected";
     
     for ($ii=0; $ii<count($sharestrings); $ii++) {
