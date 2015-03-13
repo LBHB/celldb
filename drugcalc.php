@@ -151,6 +151,27 @@ if ($row=mysql_fetch_array($wdata)) {
   echo("<td><b>" . round(($row["weight"] /1000.0 *0.002 /1), 2) . "</b></td>");
   echo("<td>SC</td><td>&nbsp;</td></tr>");
 
+  echo("<tr><td>Atropine</td><td>0.05</td><td>0.54</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *0.05 /0.54), 2) . "</b></td>");
+  echo("<td>SC</td><td>&nbsp;</td></tr>");
+
+			echo("<tr><td align=center colspan=6>&nbsp </tr></td>");
+
+			echo("<tr><td align=center colspan=6><b>***POST-OP DRUGS***</b></td></tr>");
+
+  echo("<tr><td>Meloxicam</td><td>0.2</td><td>5</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *0.2 /5), 2) . "</b></td>");
+  echo("<td>SC</td><td>Check with the vet before administrating</td></tr>");
+
+  echo("<tr><td>Buprenorphine</td><td>0.02</td><td>0.3</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *0.02 /0.3), 2) . "</b></td>");
+  echo("<td>SC</td><td>Once every 12 hrs for 3 days minimum</td></tr>");
+
+  echo("<tr><td>Baytril</td><td>10</td><td>100</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *10 /100), 2) . "</b></td>");
+  echo("<td>SC</td><td>Once a day for 10 days</td></tr>");
+
+
   //echo("Drug quantity (dosage  100 mg/kg ) : " . ($row["weight"] /1000.0 *100) . "<br");
 } else {
   echo("Error: no weights found for animal ".$animal."<br>");
