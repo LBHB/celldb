@@ -47,44 +47,41 @@ if ($row=mysql_fetch_array($wdata)) {
  
   			echo("<table border=1 width=100% border=1 cellspacing=0 cellpadding=1>\n");
   			echo("<tr><td align=center colspan=6> <b>Surgery/pre-Isoflurane Induction</b> </td></tr>");
- 		   echo("<tr><td>Drug</td><td>Dose (mg/kg)</td><td>Concentration (mg/ml)</td><td>Amount to Give (ml)</td><td>Injection Type</td><td>Notes</td></tr>");
+ 		   	echo("<tr><td>Drug</td><td>Dose (mg/kg)</td><td>Concentration (mg/ml)</td><td>Amount to Give (ml)</td><td>Injection Type</td><td>Notes</td></tr>");
 
   echo("<tr><td>Xylazine</td><td>5</td><td>20</td>");
   echo("<td><b>" . round(($row["weight"] /1000.0 *5.0 /20), 2) . "</b></td>");
   echo("<td>IM</td><td>Confirm 20mg/ml Concentration</tr>");
 
- 
-  echo("<tr><td>Ketamine</td><td>30</td><td>100</td>");
-  echo("<td><b>" . round(($row["weight"] /1000.0 *30.0 /100.0), 2) . "</b></td>");
+  echo("<tr><td>Ketamine</td><td>35</td><td>100</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *35.0 /100.0), 2) . "</b></td>");
   echo("<td>IM</td><td>&nbsp;</td></tr>");
-
-  echo("<tr><td>Dexamethasone</td><td>2</td><td>2</td>");
-  echo("<td><b>" . round(($row["weight"] /1000.0 *2 /2), 2) . "</b></td>");
-  echo("<td>SC</td><td>&nbsp;</td></tr>");
 
   echo("<tr><td>Atropine</td><td>0.05</td><td>0.54</td>");
   echo("<td><b>" . round(($row["weight"] /1000.0 *0.05 /0.54), 2) . "</b></td>");
-  echo("<td>SC</td><td>&nbsp;</td></tr>");
-
-  echo("<tr><td>Baytril</td><td>10</td><td>100</td>");
-  echo("<td><b>" . round(($row["weight"] /1000.0 *10 /100), 2) . "</b></td>");
-  echo("<td>SC</td><td>&nbsp;</td></tr>");
-
-  echo("<tr><td>Flunixamine</td><td>0.3</td><td>50</td>");
-  echo("<td><b>" . round(($row["weight"] /1000.0 *0.3 /50), 5) . "</b></td>");
   echo("<td>SC</td><td>&nbsp;</td></tr>");
 
   echo("<tr><td>Buprenorphine</td><td>0.02</td><td>0.3</td>");
   echo("<td><b>" . round(($row["weight"] /1000.0 *0.02 /0.3), 2) . "</b></td>");
   echo("<td>SC</td><td>&nbsp;</td></tr>");
   
-  echo("<tr><td>Trimethoprim/Sulfa</td><td>15-30</td><td>40</td>");
-  echo("<td><b>" . round(($row["weight"] /1000.0 *15 /40), 2) . "-" . round(($row["weight"] /1000 *30 /40), 2) ."</b></td>");
-  echo("<td>Oral</td><td>&nbsp;</td></tr>");
+  echo("<tr><td>Meloxicam</td><td>0.2</td><td>5</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *0.2 /5), 2) . "</b></td>");
+  echo("<td>SC</td><td>&nbsp;</td></tr>");
+
+  echo("<tr><td>Baytril</td><td>10</td><td>100</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *10 /100), 2) . "</b></td>");
+  echo("<td>SC</td><td>Alternative to Trimethoprim/Sulfa</tr>");
   
+  echo("<tr><td>Mannitol</td><td>1.5g/kg</td><td>20g/100ml</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *1.5 *(100/20)), 2) . "</b></td>");
+  echo("<td>IV</td><td>omit if IV catheder not placed</tr>");
+
+  echo("<tr><td>Lidocaine</td><td>2</td><td>20</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *2 /20), 2) . "</b></td>");
+  echo("<td>SC</td><td>up to the indicated dose</tr>");
   
   			echo("<tr><td align=center colspan=6>&nbsp </tr></td>");
-  
   
   
   			echo("<tr><td align=center colspan=6><b>Acepromazine Induction</b></td></tr>");
@@ -97,10 +94,7 @@ if ($row=mysql_fetch_array($wdata)) {
   echo("<td><b>" . round(($row["weight"] /1000.0 *30.0 /100.0), 2) . "</b></td>");
   echo("<td>IM</td><td>&nbsp;</td></tr>");
   
-  
-    
   			echo("<tr><td align=center colspan=6>&nbsp </tr></td>");
-  
   
   
   			echo("<tr><td align=center colspan=6><b>Dexmedetomidine Induction</b></td></tr>");
@@ -117,10 +111,7 @@ if ($row=mysql_fetch_array($wdata)) {
   echo("<td><b>" . round(($row["weight"] /1000.0 *0.2 /5), 4) . "-" . round(($row["weight"] /1000.0 *0.3 /5), 4) . "</b></td>");
   echo("<td>IM</td><td>Reversal agent for Dexmedetomidine</td></tr>");
   
-  
-  			
   			echo("<tr><td align=center colspan=6>&nbsp </tr></td>");
-  
   
   
   			echo("<tr><td align=center colspan=6><b>Diazepam Induction</b></td></tr>");
@@ -133,8 +124,7 @@ if ($row=mysql_fetch_array($wdata)) {
   echo("<td><b>" . round(($row["weight"] /1000.0 *30.0 /100.0), 2) . "</b></td>");
   echo("<td>IM</td><td>&nbsp;</td></tr>");
   
-  
-  
+  			echo("<tr><td align=center colspan=6>&nbsp </tr></td>");
   
  
   			echo("<tr><td align=center colspan=6><b>***OPT/EMERGENCY***</b></td></tr>");
@@ -147,15 +137,24 @@ if ($row=mysql_fetch_array($wdata)) {
   echo("<td><b>" . round(($row["weight"] /1000.0 *5 /20), 2) . "</b></td>");
   echo("<td>SL</td><td>&nbsp;</td></tr>");
 
-  echo("<tr><td>Epinephrine</td><td>0.002</td><td>1</td>");
-  echo("<td><b>" . round(($row["weight"] /1000.0 *0.002 /1), 2) . "</b></td>");
-  echo("<td>SC</td><td>&nbsp;</td></tr>");
+  echo("<tr><td>Epinephrine</td><td>0.02</td><td>1</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *0.02 /1), 2) . "</b></td>");
+  echo("<td>IV</td><td>&nbsp;</td></tr>");
 
   echo("<tr><td>Atropine</td><td>0.05</td><td>0.54</td>");
   echo("<td><b>" . round(($row["weight"] /1000.0 *0.05 /0.54), 2) . "</b></td>");
   echo("<td>SC</td><td>&nbsp;</td></tr>");
 
+  echo("<tr><td>Dexamethasone</td><td>2</td><td>2</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *2 /2), 2) . "</b></td>");
+  echo("<td>SC</td><td>If post-op symptoms of brain swelling</tr>");
+
+  echo("<tr><td>Famotidine</td><td>0.25-0.5</td><td>10</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *0.25 /10), 4) . "-" . round(($row["weight"] /1000.0 *0.5 /10), 4) . "</b></td>");
+  echo("<td>SC</td><td>Post-op, once daily in conjunction with Dexamethasone if needed</tr>");
+
 			echo("<tr><td align=center colspan=6>&nbsp </tr></td>");
+
 
 			echo("<tr><td align=center colspan=6><b>***POST-OP DRUGS***</b></td></tr>");
 
@@ -165,11 +164,24 @@ if ($row=mysql_fetch_array($wdata)) {
 
   echo("<tr><td>Buprenorphine</td><td>0.02</td><td>0.3</td>");
   echo("<td><b>" . round(($row["weight"] /1000.0 *0.02 /0.3), 2) . "</b></td>");
-  echo("<td>SC</td><td>Once every 12 hrs for 3 days minimum</td></tr>");
+  echo("<td>SC</td><td>Twice daily for 1-3 days</td></tr>");
+
+  echo("<tr><td>Trimethoprim/Sulfa</td><td>30</td><td>48</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *30 /48), 2) . "</b></td>");
+  echo("<td>Oral</td><td>Twice daily for 4-6 days</td></tr>");
 
   echo("<tr><td>Baytril</td><td>10</td><td>100</td>");
   echo("<td><b>" . round(($row["weight"] /1000.0 *10 /100), 2) . "</b></td>");
-  echo("<td>SC</td><td>Once a day for 10 days</td></tr>");
+  echo("<td>SC</td><td>Daily for 4-6 days as alternative to Trimeth/Sulfa</td></tr>");
+
+			echo("<tr><td align=center colspan=6>&nbsp </tr></td>");
+
+
+			echo("<tr><td align=center colspan=6><b>***OLD PROTOCOL DRUGS***</b></td></tr>");
+
+  echo("<tr><td>Flunixamine</td><td>0.3</td><td>50</td>");
+  echo("<td><b>" . round(($row["weight"] /1000.0 *0.3 /50), 5) . "</b></td>");
+  echo("<td>SC</td><td>&nbsp;</td></tr>");
 
 
   //echo("Drug quantity (dosage  100 mg/kg ) : " . ($row["weight"] /1000.0 *100) . "<br");
@@ -177,6 +189,8 @@ if ($row=mysql_fetch_array($wdata)) {
   echo("Error: no weights found for animal ".$animal."<br>");
 }
 
+
+ 
 
 
 ?>

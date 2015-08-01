@@ -228,10 +228,14 @@ while ( $row = mysql_fetch_array($userdata) ) {
     while ($jr=mysql_fetch_array($jobdata)){
       if ($jr["total"] > $jr["done"]) {
         echo("<tr>");
+        $batch=explode("/",$jr["grp"]);
+        $batch=$batch[0];
+        $baturl="<a href=\"batch/batchinfo.php?batchid=$batch\">".
+          "$batch</a>";
         $joburl="<a href=\"queuemonitor.php?userid=$userid" .
                 "&sessionid=$sessionid&user=" . $row["userid"] . 
                 "&complete=-1&notemask=". $jr["grp"]. "\">";
-        echo("<td colspan=\"5\">$joburl". $jr["grp"] . "</a>(".
+        echo("<td colspan=\"5\">$baturl $joburl". $jr["grp"] . "</a>(".
              $jr["priority"].")</td>\n");
         echo("<td colspan=\"4\">\n");
         echo("New: " . $jr["new"] .
