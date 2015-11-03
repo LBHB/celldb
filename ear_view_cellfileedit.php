@@ -102,6 +102,12 @@ echo("<tr><td>Parameter file:</td><td colspan=3><INPUT TYPE=TEXT SIZE=80 NAME=\"
 echo("<tr><td>Data path:</td><td colspan=3><INPUT TYPE=TEXT SIZE=80 NAME=\"resppath\" value=\"$resppath\"></td></tr>\n");
 echo("<tr><td>Raw data file/path:</td><td colspan=3><INPUT TYPE=TEXT SIZE=80 NAME=\"respfile\" value=\"$respfile\"></td></tr>\n");
 echo("<tr><td>Stim path:</td><td colspan=3><INPUT TYPE=TEXT SIZE=80 NAME=\"stimpath\" value=\"$stimpath\"></td></tr>\n");
+echo("<tr><td>Pupil video:</td>");
+echo("<td colspan=3><INPUT TYPE=CHECKBOX NAME=\"eyewin\" value=1");
+if (1==$eyewin) {
+   echo(" checked");
+}
+echo("<INPUT TYPE=TEXT SIZE=80 NAME=\"eyecalfile\" value=\"$eyecalfile\"></td></tr>\n");
 //echo("<tr><td>Stim file:</td><td colspan=3><INPUT TYPE=TEXT SIZE=80 NAME=\"stimfile\" value=\"$stimfile\"></td></tr>\n");
 
 echo("<tr><td>BAD FILE:</td><td><INPUT TYPE=CHECKBOX NAME=\"bad\" value=1");
